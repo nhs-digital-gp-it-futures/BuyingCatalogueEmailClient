@@ -291,6 +291,33 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
+        public static async Task SendEmailAsync_UsesSettingsSubjectPrefix()
+        {
+            const string subjectPrefix = "Bananas";
+
+            var settings = new SmtpSettings { EmailSubjectPrefix = subjectPrefix };
+            var mockTransport = new Mock<IMailTransport>();
+            var service = new MailKitEmailService(
+                mockTransport.Object,
+                settings,
+                Mock.Of<ILogger<MailKitEmailService>>());
+
+            await service.SendEmailAsync(
+                new EmailMessage
+                {
+                    Sender = new EmailAddress { Address = "from@sender.uk" },
+                    Recipient = new EmailAddress { Address = "to@recipient.uk" },
+                });
+
+            mockTransport.Verify(
+                t => t.SendAsync(
+                    It.Is<MimeMessage>(m => m.Subject == subjectPrefix),
+                    It.IsAny<CancellationToken>(),
+                    It.IsAny<ITransferProgress>()),
+                Times.Once());
+        }
+
+        [Test]
         public static async Task SendEmailAsync_Connected_Disconnects()
         {
             var settings = new SmtpSettings { Authentication = new SmtpAuthenticationSettings() };

@@ -10,6 +10,20 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     internal static class EmailMessageTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        public static void Constructor_NullMessage_ThrowsException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new EmailMessage(null!, new Uri("https://www.nhs.uk/")));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        public static void Constructor_NullPasswordResetUrl_ThrowsException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new EmailMessage(new EmailMessage(), null!));
+        }
+
+        [Test]
         public static void Constructor_EmailMessage_Uri_InitializesExpectedValues()
         {
             const string subject = "Subject";
