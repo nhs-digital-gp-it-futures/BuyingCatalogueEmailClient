@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>NHS Digital</Company>
+    <Authors>NHS Digital GP IT Futures Team</Authors>
+    <Product>Buying Catalogue</Product>
+    <PackageTags>buying catalogue email client</PackageTags>
+    <RepositoryUrl>https://github.com/nhs-digital-gp-it-futures/BuyingCatalogueEmailClient</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>This NuGet package provides the functionality to send an e-mail to a recipient.</Description>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
