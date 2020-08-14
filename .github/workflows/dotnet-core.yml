@@ -36,5 +36,4 @@ jobs:
       run: dotnet test --no-restore --verbosity normal --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
     - name: Publish to MyGet
       run: dotnet nuget push src/**/*.nupkg -k ${{ secrets.GPITDEVMYGETAPIKEY }} -s https://www.myget.org/F/buying-catalogue/api/v3/index.json --skip-duplicate
-    - name: Publish Symbols to MyGet
-      run: dotnet nuget push src/**/*.snupkg -k ${{ secrets.GPITDEVMYGETAPIKEY }} -s https://www.myget.org/F/buying-catalogue/api/v3/index.json --skip-duplicate
+
