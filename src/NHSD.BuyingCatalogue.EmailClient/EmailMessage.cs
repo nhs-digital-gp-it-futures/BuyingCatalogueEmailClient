@@ -2,7 +2,6 @@
 
 namespace NHSD.BuyingCatalogue.EmailClient
 {
-    // Workflow test.
     /// <summary>
     /// An e-mail message.
     /// </summary>
