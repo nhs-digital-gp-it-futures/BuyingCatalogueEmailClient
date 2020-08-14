@@ -2,7 +2,7 @@ name: .NET Core
 
 on:
   push:
-    branches: [ master, features/** ]
+    branches: [ master, feature/** ]
 
 jobs:
   build:
@@ -36,4 +36,3 @@ jobs:
       run: dotnet test --no-restore --verbosity normal --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
     - name: Publish to MyGet
       run: dotnet nuget push src/**/*.nupkg -k ${{ secrets.GPITDEVMYGETAPIKEY }} -s https://www.myget.org/F/buying-catalogue/api/v2/package --skip-duplicate
-      
