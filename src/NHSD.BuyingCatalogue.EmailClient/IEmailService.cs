@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace NHSD.BuyingCatalogue.EmailClient
 {
     /// <summary>
     /// Defines operations for sending e-mails.
     /// </summary>
-    [PublicAPI]
+    [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Public API")]
     public interface IEmailService
     {
         /// <summary>
