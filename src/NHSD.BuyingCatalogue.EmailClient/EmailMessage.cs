@@ -62,6 +62,16 @@ namespace NHSD.BuyingCatalogue.EmailClient
         }
 
         /// <summary>
+        /// Gets or sets the recipient (to address) of the message.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
+        public EmailAddress? Recipient
+        {
+            get => _recipient;
+            set => _recipient = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        /// <summary>
         /// Gets or sets the subject of the message.
         /// </summary>
         public string? Subject { get; set; }
@@ -77,13 +87,13 @@ namespace NHSD.BuyingCatalogue.EmailClient
         public string? TextBody { get; set; }
 
         /// <summary>
-        /// Gets or sets the recipient (to address) of the message.
+        /// Gets or sets the message attachment.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
-        public EmailAddress? Recipient
-        {
-            get => _recipient;
-            set => _recipient = value ?? throw new ArgumentNullException(nameof(value));
-        }
+        public EmailAttachment? Attachment { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the message has an attachment.
+        /// </summary>
+        public bool HasAttachment => Attachment != null;
     }
 }

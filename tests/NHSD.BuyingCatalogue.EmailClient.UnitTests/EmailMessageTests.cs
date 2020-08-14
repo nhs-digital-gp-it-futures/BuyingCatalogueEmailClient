@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 
 namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
@@ -24,50 +26,117 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void Constructor_EmailMessage_Uri_InitializesExpectedValues()
+        public static void Constructor_EmailMessage_Uri_DoesNotInitializeRecipient()
         {
-            const string subject = "Subject";
-            const string htmlBody = "HTML " + EmailMessage.ResetPasswordLinkPlaceholder;
-            const string textBody = "Text " + EmailMessage.ResetPasswordLinkPlaceholder;
-            const string url = "https://www.foobar.co.uk/";
+            var inputMessage = new EmailMessage
+            {
+                Sender = new EmailAddress(),
+                Recipient = new EmailAddress(),
+            };
 
+            var outputMessage = new EmailMessage(inputMessage, new Uri("https://test.uk"));
+
+            outputMessage.Recipient.Should().BeNull();
+        }
+
+        [Test]
+        public static void Constructor_EmailMessage_Uri_InitializesSender()
+        {
             var sender = new EmailAddress();
             var inputMessage = new EmailMessage
             {
                 Sender = sender,
-                Subject = subject,
-                HtmlBody = htmlBody,
-                TextBody = textBody,
             };
 
-            var outputMessage = new EmailMessage(inputMessage, new Uri(url));
+            var outputMessage = new EmailMessage(inputMessage, new Uri("https://test.uk"));
 
             outputMessage.Sender.Should().Be(sender);
-            outputMessage.Recipient.Should().BeNull();
-            outputMessage.Subject.Should().Be(subject);
-            outputMessage.HtmlBody.Should().Be("HTML " + url);
-            outputMessage.TextBody.Should().Be("Text " + url);
         }
 
         [Test]
-        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Testing mixed case")]
-        public static void Constructor_EmailMessage_Uri_UrlPlaceholderCaseMismatch_DoesNotSetUrl()
+        public static void Constructor_EmailMessage_Uri_InitializesSubject()
         {
-            const string url = "https://www.foobar.co.uk/";
+            const string subject = "Subject";
 
-            var htmlBody = "HTML " + EmailMessage.ResetPasswordLinkPlaceholder.ToUpperInvariant();
-            var textBody = "Text " + EmailMessage.ResetPasswordLinkPlaceholder.ToLowerInvariant();
+            var inputMessage = new EmailMessage
+            {
+                Sender = new EmailAddress(),
+                Subject = subject,
+            };
+
+            var outputMessage = new EmailMessage(inputMessage, new Uri("https://test.uk"));
+
+            outputMessage.Subject.Should().Be(subject);
+        }
+
+        [Test]
+        public static void Constructor_EmailMessage_Uri_InitializesHtmlBody()
+        {
+            const string htmlBody = "HTML " + EmailMessage.ResetPasswordLinkPlaceholder;
+            const string url = "https://www.foobar.co.uk/";
 
             var inputMessage = new EmailMessage
             {
                 Sender = new EmailAddress(),
                 HtmlBody = htmlBody,
+            };
+
+            var outputMessage = new EmailMessage(inputMessage, new Uri(url));
+
+            outputMessage.HtmlBody.Should().Be("HTML " + url);
+        }
+
+        [Test]
+        public static void Constructor_EmailMessage_Uri_InitializesTextBody()
+        {
+            const string textBody = "Text " + EmailMessage.ResetPasswordLinkPlaceholder;
+            const string url = "https://www.foobar.co.uk/";
+
+            var inputMessage = new EmailMessage
+            {
+                Sender = new EmailAddress(),
                 TextBody = textBody,
             };
 
             var outputMessage = new EmailMessage(inputMessage, new Uri(url));
 
+            outputMessage.TextBody.Should().Be("Text " + url);
+        }
+
+        [Test]
+        public static void Constructor_EmailMessage_Uri_UrlPlaceholderCaseMismatchInHtmlBody_DoesNotSetUrl()
+        {
+            const string url = "https://www.foobar.co.uk/";
+
+            var htmlBody = "HTML " + EmailMessage.ResetPasswordLinkPlaceholder.ToUpperInvariant();
+
+            var inputMessage = new EmailMessage
+            {
+                Sender = new EmailAddress(),
+                HtmlBody = htmlBody,
+            };
+
+            var outputMessage = new EmailMessage(inputMessage, new Uri(url));
+
             outputMessage.HtmlBody.Should().Be(htmlBody);
+        }
+
+        [Test]
+        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Testing mixed case")]
+        public static void Constructor_EmailMessage_Uri_UrlPlaceholderCaseMismatchInTextBody_DoesNotSetUrl()
+        {
+            const string url = "https://www.foobar.co.uk/";
+
+            var textBody = "Text " + EmailMessage.ResetPasswordLinkPlaceholder.ToLowerInvariant();
+
+            var inputMessage = new EmailMessage
+            {
+                Sender = new EmailAddress(),
+                TextBody = textBody,
+            };
+
+            var outputMessage = new EmailMessage(inputMessage, new Uri(url));
+
             outputMessage.TextBody.Should().Be(textBody);
         }
 
@@ -83,6 +152,25 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         public static void Sender_Set_NullAddress_ThrowsException()
         {
             Assert.Throws<ArgumentNullException>(() => new EmailMessage { Sender = null });
+        }
+
+        [Test]
+        public static void HasAttachment_NullAttachment_ReturnsFalse()
+        {
+            var message = new EmailMessage();
+
+            message.HasAttachment.Should().BeFalse();
+        }
+
+        [Test]
+        public static void HasAttachment_WithAttachment_ReturnsTrue()
+        {
+            var message = new EmailMessage
+            {
+                Attachment = new EmailAttachment("fileName", Mock.Of<Stream>()),
+            };
+
+            message.HasAttachment.Should().BeTrue();
         }
     }
 }

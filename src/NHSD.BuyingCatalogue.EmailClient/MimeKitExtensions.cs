@@ -21,13 +21,17 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <param name="emailMessage">The receiving <see cref="EmailMessage"/> instance.</param>
         /// <param name="emailSubjectPrefix">The text used as a prefix to the e-mail subject.</param>
         /// <returns>the corresponding <see cref="MimeMessage"/>.</returns>
-        internal static MimeMessage AsMimeMessage(this EmailMessage emailMessage, string? emailSubjectPrefix)
+        internal static MimeMessage AsMimeMessage(
+            this EmailMessage emailMessage,
+            string? emailSubjectPrefix = null)
         {
             var bodyBuilder = new BodyBuilder
             {
                 HtmlBody = emailMessage.HtmlBody,
                 TextBody = emailMessage.TextBody,
             };
+
+            AddAttachment(bodyBuilder.Attachments, emailMessage);
 
             var message = new MimeMessage
             {
@@ -39,6 +43,15 @@ namespace NHSD.BuyingCatalogue.EmailClient
             message.To.Add(emailMessage.Recipient?.AsMailboxAddress());
 
             return message;
+        }
+
+        private static void AddAttachment(AttachmentCollection attachments, EmailMessage emailMessage)
+        {
+            if (!emailMessage.HasAttachment)
+                return;
+
+            var attachment = emailMessage.Attachment!;
+            attachments.Add(attachment.FileName, attachment.Content);
         }
     }
 }
