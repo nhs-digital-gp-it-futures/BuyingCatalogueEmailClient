@@ -2,6 +2,11 @@
 
 This repo contains the Buying Catalogue Email Client library, which contains the functionality to send an e-mail to a recipient. The library is packaged as a NuGet package available in the Buying Catalogue MyGet feed.
 
+## Package Build Status
+
+| Status |
+| ![.NET Core](https://github.com/nhs-digital-gp-it-futures/BuyingCatalogueEmailClient/workflows/.NET%20Core/badge.svg) |
+
 ## Installing the package
 
 ### Prerequisites
