@@ -209,8 +209,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             {
                 Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
                 Recipient = new EmailAddress { Address = "recipient@somedomain.test" },
-                Attachment = new EmailAttachment(fileName, contentStream),
             };
+
+            emailMessage.Attachments.Add(new EmailAttachment(fileName, contentStream));
 
             var mimeMessage = emailMessage.AsMimeMessage();
             var attachments = mimeMessage.Attachments.ToList();

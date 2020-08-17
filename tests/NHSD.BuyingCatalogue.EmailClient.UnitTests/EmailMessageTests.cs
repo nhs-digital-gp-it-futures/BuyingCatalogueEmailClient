@@ -155,22 +155,20 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void HasAttachment_NullAttachment_ReturnsFalse()
+        public static void HasAttachments_NoAttachments_ReturnsFalse()
         {
             var message = new EmailMessage();
 
-            message.HasAttachment.Should().BeFalse();
+            message.HasAttachments.Should().BeFalse();
         }
 
         [Test]
-        public static void HasAttachment_WithAttachment_ReturnsTrue()
+        public static void HasAttachments_WithAttachment_ReturnsTrue()
         {
-            var message = new EmailMessage
-            {
-                Attachment = new EmailAttachment("fileName", Mock.Of<Stream>()),
-            };
+            var message = new EmailMessage();
+            message.Attachments.Add(new EmailAttachment("fileName", Mock.Of<Stream>()));
 
-            message.HasAttachment.Should().BeTrue();
+            message.HasAttachments.Should().BeTrue();
         }
     }
 }

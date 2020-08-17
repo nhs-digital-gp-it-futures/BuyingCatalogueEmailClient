@@ -47,11 +47,13 @@ namespace NHSD.BuyingCatalogue.EmailClient
 
         private static void AddAttachment(AttachmentCollection attachments, EmailMessage emailMessage)
         {
-            if (!emailMessage.HasAttachment)
+            if (!emailMessage.HasAttachments)
                 return;
 
-            var attachment = emailMessage.Attachment!;
-            attachments.Add(attachment.FileName, attachment.Content);
+            foreach (var attachment in emailMessage.Attachments)
+            {
+                attachments.Add(attachment.FileName, attachment.Content);
+            }
         }
     }
 }

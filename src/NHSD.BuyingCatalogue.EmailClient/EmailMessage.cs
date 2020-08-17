@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.BuyingCatalogue.EmailClient
 {
@@ -87,13 +89,13 @@ namespace NHSD.BuyingCatalogue.EmailClient
         public string? TextBody { get; set; }
 
         /// <summary>
-        /// Gets or sets the message attachment.
+        /// Gets the collection of message attachments.
         /// </summary>
-        public EmailAttachment? Attachment { get; set; }
+        public IList<EmailAttachment> Attachments { get; } = new List<EmailAttachment>();
 
         /// <summary>
         /// Gets a value indicating whether the message has an attachment.
         /// </summary>
-        public bool HasAttachment => Attachment != null;
+        public bool HasAttachments => Attachments.Any();
     }
 }
