@@ -10,14 +10,22 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     internal static class EmailAddressTests
     {
         [Test]
-        public static void Constructor_String_String_InitializesExpectedValues()
+        public static void Constructor_String_String_InitializesDisplayName()
         {
             const string name = "Some Body";
-            const string address = "somebody@notarealaddress.co.uk";
 
-            var emailAddress = new EmailAddress(name, address);
+            var emailAddress = new EmailAddress(name, "a@b.test");
 
             emailAddress.DisplayName.Should().Be(name);
+        }
+
+        [Test]
+        public static void Constructor_String_String_InitializesAddress()
+        {
+            const string address = "somebody@notarealaddress.test";
+
+            var emailAddress = new EmailAddress("Name", address);
+
             emailAddress.Address.Should().Be(address);
         }
 

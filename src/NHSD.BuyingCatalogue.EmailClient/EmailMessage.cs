@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSD.BuyingCatalogue.EmailClient
 {
@@ -62,6 +64,16 @@ namespace NHSD.BuyingCatalogue.EmailClient
         }
 
         /// <summary>
+        /// Gets or sets the recipient (to address) of the message.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
+        public EmailAddress? Recipient
+        {
+            get => _recipient;
+            set => _recipient = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        /// <summary>
         /// Gets or sets the subject of the message.
         /// </summary>
         public string? Subject { get; set; }
@@ -77,13 +89,13 @@ namespace NHSD.BuyingCatalogue.EmailClient
         public string? TextBody { get; set; }
 
         /// <summary>
-        /// Gets or sets the recipient (to address) of the message.
+        /// Gets the collection of message attachments.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
-        public EmailAddress? Recipient
-        {
-            get => _recipient;
-            set => _recipient = value ?? throw new ArgumentNullException(nameof(value));
-        }
+        public IList<EmailAttachment> Attachments { get; } = new List<EmailAttachment>();
+
+        /// <summary>
+        /// Gets a value indicating whether the message has an attachment.
+        /// </summary>
+        public bool HasAttachments => Attachments.Any();
     }
 }
