@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common", "src\NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common\NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.csproj", "{567BA2D1-8DDC-47F8-A712-49061B059345}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{AD8AAAF6-E070-4B6F-BF22-D4F09688A756}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD8AAAF6-E070-4B6F-BF22-D4F09688A756}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD8AAAF6-E070-4B6F-BF22-D4F09688A756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{567BA2D1-8DDC-47F8-A712-49061B059345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{567BA2D1-8DDC-47F8-A712-49061B059345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{567BA2D1-8DDC-47F8-A712-49061B059345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{567BA2D1-8DDC-47F8-A712-49061B059345}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +43,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{39292E1F-CDFB-4F7F-8591-2E530EFF0B73} = {8C8FF790-5FE8-4FA3-B9FF-1AC1ADFC0A9B}
 		{AD8AAAF6-E070-4B6F-BF22-D4F09688A756} = {373987BB-D19A-499D-BDDC-6A7347ECA4E6}
+		{567BA2D1-8DDC-47F8-A712-49061B059345} = {8C8FF790-5FE8-4FA3-B9FF-1AC1ADFC0A9B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C87B177A-8504-422B-B326-2962470B1422}
