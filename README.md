@@ -1,7 +1,7 @@
 # BuyingCatalogueEmailClient
 
 ![.NET Core](https://github.com/nhs-digital-gp-it-futures/BuyingCatalogueEmailClient/workflows/.NET%20Core/badge.svg)
-![MyGet](https://img.shields.io/myget/buying-catalogue/v/NHSD.BuyingCatalogue.EmailClient?label=MyGet&logo=NuGet)
+![MyGet](https://img.shields.io/myget/buyingcatalogue/v/NHSD.BuyingCatalogue.EmailClient?label=MyGet&logo=NuGet)
 
 This repo contains the Buying Catalogue Email Client library, which contains the functionality to send an e-mail to a recipient. The library is packaged as a NuGet package available in the Buying Catalogue MyGet feed.
 
@@ -9,13 +9,13 @@ This repo contains the Buying Catalogue Email Client library, which contains the
 
 ### Prerequisites
 
-Make sure the solution has a `.nuget` solution directory with a `NuGet.config` file that has the following contents.
+Make sure the repository has a `NuGet.config` file at the solution directory level with the following contents.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <packageSources>
-    <add key="MyGet" value="https://www.myget.org/F/buying-catalogue/api/v3/index.json" />
+    <add key="MyGet" value="https://www.myget.org/F/buyingcatalogue/api/v3/index.json" />
     <add key="NuGet.org" value="https://api.nuget.org/v3/index.json" />
   </packageSources>
 </configuration>
