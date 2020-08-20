@@ -27,8 +27,8 @@ namespace NHSD.BuyingCatalogue.EmailClient
         {
             var bodyBuilder = new BodyBuilder
             {
-                HtmlBody = emailMessage.HtmlBody,
-                TextBody = emailMessage.TextBody,
+                HtmlBody = emailMessage.HtmlBody?.ToString(),
+                TextBody = emailMessage.TextBody?.ToString(),
             };
 
             AddAttachment(bodyBuilder.Attachments, emailMessage);
@@ -40,7 +40,11 @@ namespace NHSD.BuyingCatalogue.EmailClient
             };
 
             message.From.Add(emailMessage.Sender?.AsMailboxAddress());
-            message.To.Add(emailMessage.Recipient?.AsMailboxAddress());
+
+            foreach (var recipient in emailMessage.Recipients)
+            {
+                message.To.Add(recipient.AsMailboxAddress());
+            }
 
             return message;
         }

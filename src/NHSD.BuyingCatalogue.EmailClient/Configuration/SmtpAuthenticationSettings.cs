@@ -1,4 +1,4 @@
-﻿namespace NHSD.BuyingCatalogue.EmailClient
+﻿namespace NHSD.BuyingCatalogue.EmailClient.Configuration
 {
     /// <summary>
     /// SMTP authentication settings.
