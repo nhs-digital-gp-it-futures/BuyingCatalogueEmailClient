@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>NHS Digital</Company>
+    <Authors>NHS Digital GP IT Futures Team</Authors>
+    <Product>Buying Catalogue</Product>
+    <PackageTags>buying catalogue email client integration test common</PackageTags>
+    <RepositoryUrl>https://github.com/nhs-digital-gp-it-futures/BuyingCatalogueEmailClient</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>This NuGet package provides support functionality for testing sending an e-mail to a recipient.</Description>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <NoWarn>NU5123</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flurl.Http" Version="2.4.2" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="SpecFlow" Version="3.3.57" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.57" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>
+
