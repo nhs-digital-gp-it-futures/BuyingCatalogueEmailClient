@@ -101,5 +101,18 @@ namespace NHSD.BuyingCatalogue.EmailClient
 
             _recipients.Add(new EmailAddress(address, displayName));
         }
+
+        /// <summary>
+        /// Adds a recipient with the provided <paramref name="address"/> to the list of recipients.
+        /// </summary>
+        /// <param name="address">The e-mail address of the recipient.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="address"/> is <see langref="null"/>.</exception>
+        public void AddRecipient(EmailAddress address)
+        {
+            if (address is null)
+                throw new ArgumentNullException(nameof(address));
+
+            _recipients.Add(address);
+        }
     }
 }

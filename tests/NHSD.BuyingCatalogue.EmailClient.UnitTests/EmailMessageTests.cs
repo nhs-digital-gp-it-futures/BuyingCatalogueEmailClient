@@ -83,16 +83,16 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void AddRecipient_NullAddress_ThrowsArgumentNullException()
+        public static void AddRecipient_String_String_NullAddress_ThrowsArgumentNullException()
         {
             var message = new EmailMessage();
 
-            Assert.Throws<ArgumentNullException>(() => message.AddRecipient(null!));
+            Assert.Throws<ArgumentNullException>(() => message.AddRecipient(((string)null)!));
         }
 
         [TestCase("")]
         [TestCase("\t")]
-        public static void AddRecipient_EmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
+        public static void AddRecipient_String_String_EmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
         {
             var message = new EmailMessage();
 
@@ -100,7 +100,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void AddRecipient_AddsExpectedRecipient()
+        public static void AddRecipient_String_String_AddsExpectedRecipient()
         {
             const string address = "a@b.test";
             const string displayName = "Miss Address";
@@ -114,6 +114,28 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var actualEmailAddress = message.Recipients[0];
             actualEmailAddress.Should().BeEquivalentTo(expectedEmailAddress);
+        }
+
+        [Test]
+        public static void AddRecipient_EmailAddress_NullAddress_ThrowsArgumentNullException()
+        {
+            var message = new EmailMessage();
+
+            Assert.Throws<ArgumentNullException>(() => message.AddRecipient(null!));
+        }
+
+        [Test]
+        public static void AddRecipient_EmailAddress_AddsExpectedRecipient()
+        {
+            var expectedEmailAddress = new EmailAddress("a@b.test", "Miss Address");
+
+            var message = new EmailMessage();
+            message.AddRecipient(expectedEmailAddress);
+
+            message.Recipients.Should().HaveCount(1);
+
+            var actualEmailAddress = message.Recipients[0];
+            actualEmailAddress.Should().BeSameAs(expectedEmailAddress);
         }
     }
 }
