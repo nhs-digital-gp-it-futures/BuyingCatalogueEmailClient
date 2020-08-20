@@ -44,6 +44,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         {
             var responseBody = await _emailServiceDriverSettings
                 .SmtpServerApiBaseUrl
+                .AbsoluteUri
                 .AppendPathSegment("email")
                 .GetJsonListAsync();
 
@@ -65,6 +66,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         {
             await _emailServiceDriverSettings
                 .SmtpServerApiBaseUrl
+                .AbsoluteUri
                 .AppendPathSegments("email", "all")
                 .DeleteAsync();
         }
