@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
+﻿namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
     /// <summary>
     /// An object used to pass SmtpServerApiBaseUrl to the EmailServiceDriver.

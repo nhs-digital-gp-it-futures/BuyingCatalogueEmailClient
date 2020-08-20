@@ -15,17 +15,14 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     [Binding]
     public sealed class EmailServerDriver
     {
-        private readonly ScenarioContext _context;
         private readonly EmailServiceDriverSettings _emailServiceDriverSettings;
 
         /// <summary>
         /// EmailServerDriver allows access to the contents of a SMTP mail server.
         /// </summary>
-        /// <param name="context"> The ScenarioContext of the currently executing test.</param>
         /// <param name="emailServiceDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
-        public EmailServerDriver(ScenarioContext context, EmailServiceDriverSettings emailServiceDriverSettings)
+        public EmailServerDriver(EmailServiceDriverSettings emailServiceDriverSettings)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             _emailServiceDriverSettings = emailServiceDriverSettings ?? throw new ArgumentNullException(nameof(emailServiceDriverSettings));
         }
 
@@ -36,7 +33,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         public async Task<int> GetEmailCountAsync()
         {
             var emailList = await FindAllEmailsAsync();
-            return emailList.Count();
+            return emailList.Count;
         }
 
         /// <summary>
@@ -66,10 +63,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns><see cref="Task" /></returns>
         public async Task ClearAllEmailsAsync()
         {
-                await _emailServiceDriverSettings
-                    .SmtpServerApiBaseUrl
-                    .AppendPathSegments("email", "all")
-                    .DeleteAsync();
+            await _emailServiceDriverSettings
+                .SmtpServerApiBaseUrl
+                .AppendPathSegments("email", "all")
+                .DeleteAsync();
         }
     }
 }
