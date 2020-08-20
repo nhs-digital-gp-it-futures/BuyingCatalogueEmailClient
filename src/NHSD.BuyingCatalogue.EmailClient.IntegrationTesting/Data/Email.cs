@@ -1,4 +1,6 @@
-﻿namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
+﻿using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Utils;
+
+namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
     /// <summary>
     /// Represents the contents of an Email message.
@@ -29,5 +31,10 @@
         /// Gets or sets HtmlBody.
         /// </summary>
         public string? HtmlBody { get; set; }
+
+        /// <summary>
+        /// Gets or sets Attachment
+        /// </summary>
+        public EmailAttachment? Attachment { get; set; }
     }
 }

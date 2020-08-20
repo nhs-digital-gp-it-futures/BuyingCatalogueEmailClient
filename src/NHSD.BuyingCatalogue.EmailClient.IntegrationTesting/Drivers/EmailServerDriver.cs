@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
+using Newtonsoft.Json.Linq;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Utils;
 using TechTalk.SpecFlow;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
@@ -54,7 +59,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 HtmlBody = x.html,
                 Subject = x.subject,
                 From = x.from[0].address,
-                To = x.to[0].address
+                To = x.to[0].address,
+                Attachment = ExtractAttachment(x)
             }).ToList();
         }
 
@@ -69,6 +75,21 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .AbsoluteUri
                 .AppendPathSegments("email", "all")
                 .DeleteAsync();
+        }
+
+        private static EmailAttachment? ExtractAttachment(JToken x)
+        {
+            if (!x.Contains("attachment"))
+            {
+                return null;
+            }
+
+            byte[] byteArray = Encoding.ASCII.GetBytes(x.SelectToken("attachment").First().SelectToken("stream").ToString().Trim());
+            var stream = new MemoryStream(byteArray);
+            var fileName = x.SelectToken("attachment").First().SelectToken("fileName").ToString().Trim();
+            var contentType = x.SelectToken("attachment").First().SelectToken("contentType").ToString().Trim();
+
+            return new EmailAttachment(stream, fileName, new ContentType(contentType));
         }
     }
 }
