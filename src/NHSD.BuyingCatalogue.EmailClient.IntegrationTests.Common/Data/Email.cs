@@ -1,32 +1,32 @@
-﻿namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Data
+﻿namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
     /// <summary>
-    /// Email Data Class
+    /// Represents the contents of an Email message.
     /// </summary>
     public sealed class Email
     {
         /// <summary>
-        /// From Address
+        /// Gets or sets From.
         /// </summary>
         public string? From { get; set; }
 
         /// <summary>
-        ///  To Address
+        /// Gets or sets To.
         /// </summary>
         public string? To { get; set; }
 
         /// <summary>
-        /// Subject
+        /// Gets or sets Subject.
         /// </summary>
         public string? Subject { get; set; }
 
         /// <summary>
-        /// PlainTextBody
+        /// Gets or sets PlainTextBody.
         /// </summary>
         public string? PlainTextBody { get; set; }
 
         /// <summary>
-        /// HtmlBody
+        /// Gets or sets HtmlBody.
         /// </summary>
         public string? HtmlBody { get; set; }
     }

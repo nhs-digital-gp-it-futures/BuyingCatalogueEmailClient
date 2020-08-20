@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Data;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Support;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 using TechTalk.SpecFlow;
 
-namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Drivers
+namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
     /// <summary>
-    /// EmailServerDriver
+    ///  Manages interaction with a SMTP server.
     /// </summary>
     [Binding]
     public sealed class EmailServerDriver
@@ -20,10 +19,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Drivers
         private readonly EmailServiceDriverSettings _emailServiceDriverSettings;
 
         /// <summary>
-        /// EmailServerDriver
+        /// EmailServerDriver allows access to the contents of a SMTP mail server.
         /// </summary>
-        /// <param name="context">ScenarioContext</param>
-        /// <param name="emailServiceDriverSettings">EmailDriverSettings</param>
+        /// <param name="context"> The ScenarioContext of the currently executing test.</param>
+        /// <param name="emailServiceDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
         public EmailServerDriver(ScenarioContext context, EmailServiceDriverSettings emailServiceDriverSettings)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -31,9 +30,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Drivers
         }
 
         /// <summary>
-        /// GetEmailCountAsync
+        /// Gets the number of emails in the mailbox.
         /// </summary>
-        /// <returns>int number of emails</returns>
+        /// <returns>the number of <see cref="Email"/> sent</returns>
         public async Task<int> GetEmailCountAsync()
         {
             var emailList = await FindAllEmailsAsync();
@@ -41,10 +40,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Drivers
         }
 
         /// <summary>
-        /// FindAllEmailsAsync
+        /// FindAllEmailsAsync gets email objects from the SMTP service.
         /// </summary>
-        /// <returns>IEnumerable of Email</returns>
-        public async Task<IEnumerable<Email>> FindAllEmailsAsync()
+        /// <returns>A IReadOnlyList of<see cref="Email"/></returns>
+        public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
         {
             var responseBody = await _emailServiceDriverSettings
                 .SmtpServerApiBaseUrl
@@ -58,22 +57,19 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Drivers
                 Subject = x.subject,
                 From = x.from[0].address,
                 To = x.to[0].address
-            });
+            }).ToList();
         }
 
         /// <summary>
-        /// ClearAllEmailsAsync
+        /// ClearAllEmailsAsync deletes all emails from the SMTP service.
         /// </summary>
-        /// <returns>Task</returns>
+        /// <returns><see cref="Task" /></returns>
         public async Task ClearAllEmailsAsync()
         {
-            if (_context.TryGetValue(ScenarioContextKeys.EmailSent, out bool _))
-            {
                 await _emailServiceDriverSettings
                     .SmtpServerApiBaseUrl
                     .AppendPathSegments("email", "all")
                     .DeleteAsync();
-            }
         }
     }
 }

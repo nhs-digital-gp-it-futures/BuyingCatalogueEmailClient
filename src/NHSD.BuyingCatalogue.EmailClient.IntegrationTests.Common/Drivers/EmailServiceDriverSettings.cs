@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTests.Common.Drivers
+namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
     /// <summary>
-    /// 
+    /// An object used to pass SmtpServerApiBaseUrl to the EmailServiceDriver.
     /// </summary>
-    public class EmailServiceDriverSettings
+    public sealed class EmailServiceDriverSettings
     {
         /// <summary>
-        /// SmtpServerApiBaseUrl
+        /// SmtpServerApiBaseUrl is the URL used to connect SMTP Server.
         /// </summary>
-        public string SmtpServerApiBaseUrl { get; set; }
+        public string SmtpServerApiBaseUrl { get; }
 
         /// <summary>
-        /// EmailServiceDriverSettings
+        ///  EmailServiceDriverSettings contains the configuration information used by the EmailServiceDriver.
         /// </summary>
         /// <param name="smtpServerApiBaseUrl">EmailServiceDriverSettings</param>
         public EmailServiceDriverSettings(string smtpServerApiBaseUrl)
