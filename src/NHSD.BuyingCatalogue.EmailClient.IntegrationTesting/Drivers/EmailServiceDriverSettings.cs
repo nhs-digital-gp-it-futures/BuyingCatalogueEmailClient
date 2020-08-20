@@ -1,4 +1,6 @@
-﻿namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
+﻿using System;
+
+namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
     /// <summary>
     /// An object used to pass SmtpServerApiBaseUrl to the EmailServiceDriver.
@@ -16,6 +18,10 @@
         /// <param name="smtpServerApiBaseUrl">EmailServiceDriverSettings</param>
         public EmailServiceDriverSettings(string smtpServerApiBaseUrl)
         {
+            if (string.IsNullOrEmpty(smtpServerApiBaseUrl))
+            {
+                throw new ArgumentNullException(nameof(smtpServerApiBaseUrl));
+            }
             SmtpServerApiBaseUrl = smtpServerApiBaseUrl;
         }
     }

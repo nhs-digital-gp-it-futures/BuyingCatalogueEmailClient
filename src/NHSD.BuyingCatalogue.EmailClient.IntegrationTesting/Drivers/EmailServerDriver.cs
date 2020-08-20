@@ -39,7 +39,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <summary>
         /// FindAllEmailsAsync gets email objects from the SMTP service.
         /// </summary>
-        /// <returns>A IReadOnlyList of<see cref="Email"/></returns>
+        /// <returns>A IReadOnlyList of <see cref="Email"/></returns>
         public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
         {
             var responseBody = await _emailServiceDriverSettings
