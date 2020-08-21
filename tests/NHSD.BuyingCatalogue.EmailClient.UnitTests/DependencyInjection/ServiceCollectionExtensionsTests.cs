@@ -14,6 +14,7 @@ using NUnit.Framework;
 namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     internal static class ServiceCollectionExtensionsTests
     {
         [Test]
