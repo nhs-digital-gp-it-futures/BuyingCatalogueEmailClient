@@ -5,7 +5,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     /// <summary>
     /// An object used to pass SmtpServerApiBaseUrl to the EmailServiceDriver.
     /// </summary>
-    public sealed class EmailServiceDriverSettings
+    public sealed class EmailServerDriverSettings
     {
         /// <summary>
         /// SmtpServerApiBaseUrl is the URL used to connect SMTP Server.
@@ -13,12 +13,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         public Uri SmtpServerApiBaseUrl { get; }
 
         /// <summary>
-        ///  EmailServiceDriverSettings contains the configuration information used by the EmailServiceDriver.
+        ///  EmailServerDriverSettings contains the configuration information used by the EmailServiceDriver.
         /// </summary>
-        /// <param name="smtpServerApiBaseUrl">EmailServiceDriverSettings</param>
-        public EmailServiceDriverSettings(Uri smtpServerApiBaseUrl)
+        /// <param name="smtpServerApiBaseUrl">EmailServerDriverSettings</param>
+        public EmailServerDriverSettings(Uri smtpServerApiBaseUrl)
         {
-            SmtpServerApiBaseUrl = smtpServerApiBaseUrl;
+            SmtpServerApiBaseUrl = smtpServerApiBaseUrl ?? throw new ArgumentNullException(nameof(smtpServerApiBaseUrl));
         }
     }
 }

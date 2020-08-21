@@ -20,15 +20,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     [Binding]
     public sealed class EmailServerDriver
     {
-        private readonly EmailServiceDriverSettings _emailServiceDriverSettings;
+        private readonly EmailServerDriverSettings EmailServerDriverSettings;
 
         /// <summary>
         /// EmailServerDriver allows access to the contents of a SMTP mail server.
         /// </summary>
-        /// <param name="emailServiceDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
-        public EmailServerDriver(EmailServiceDriverSettings emailServiceDriverSettings)
+        /// <param name="emailServerDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
+        public EmailServerDriver(EmailServerDriverSettings emailServerDriverSettings)
         {
-            _emailServiceDriverSettings = emailServiceDriverSettings ?? throw new ArgumentNullException(nameof(emailServiceDriverSettings));
+            EmailServerDriverSettings = emailServerDriverSettings ?? throw new ArgumentNullException(nameof(emailServerDriverSettings));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns>A IReadOnlyList of <see cref="Email"/></returns>
         public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
         {
-            var responseBody = await _emailServiceDriverSettings
+            var responseBody = await EmailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegment("email")
@@ -70,25 +70,25 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns><see cref="Task" /></returns>
         public async Task ClearAllEmailsAsync()
         {
-            await _emailServiceDriverSettings
+            await EmailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegments("email", "all")
                 .DeleteAsync();
         }
 
-        private static EmailAttachment? ExtractAttachment(JToken x)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "<Pending>")]
+        private static EmailAttachment? ExtractAttachment(dynamic x)
         {
-            if (!x.Contains("attachment"))
+            if (x.attachment == null)
             {
                 return null;
             }
 
-            byte[] byteArray = Encoding.ASCII.GetBytes(x.SelectToken("attachment").First().SelectToken("stream").ToString().Trim());
+            byte[] byteArray = Encoding.ASCII.GetBytes(x.attachment.stream.ToString().Trim());
             var stream = new MemoryStream(byteArray);
-            var fileName = x.SelectToken("attachment").First().SelectToken("fileName").ToString().Trim();
-            var contentType = x.SelectToken("attachment").First().SelectToken("contentType").ToString().Trim();
-
+            var fileName = x.attachment.fileName.Trim();
+            var contentType = x.attachment.contentType.Trim();
             return new EmailAttachment(stream, fileName, new ContentType(contentType));
         }
     }

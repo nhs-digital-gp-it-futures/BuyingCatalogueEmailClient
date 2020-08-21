@@ -14,7 +14,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Utils
         /// </summary>
         public string ContentAsString { get; set; }
         /// <summary>
-        /// Reades the content of an attachment and stores it as an encode string. Also stores the attachment filename. 
+        /// Reads the content of an attachment and stores it as an encode string. Also stores the attachment filename. 
         /// </summary>
         /// <param name="contentStream">The stream containing the attachment.</param>
         /// <param name="fileName">The filename of the attachment.</param>
