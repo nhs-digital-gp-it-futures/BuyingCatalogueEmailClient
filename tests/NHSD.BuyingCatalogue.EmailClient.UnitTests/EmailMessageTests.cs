@@ -13,25 +13,25 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     {
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Constructor_MessageTemplate_NullTemplate_ThrowsArgumentNullException()
+        public static void Constructor_EmailMessageTemplate_NullTemplate_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new EmailMessage(((MessageTemplate)null)!));
+            Assert.Throws<ArgumentNullException>(() => new EmailMessage(((EmailMessageTemplate)null)!));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Constructor_MessageTemplate_NullSender_ThrowsArgumentException()
+        public static void Constructor_EmailMessageTemplate_NullSender_ThrowsArgumentException()
         {
-            var template = new MessageTemplate();
+            var template = new EmailMessageTemplate();
 
             Assert.Throws<ArgumentException>(() => new EmailMessage(template));
         }
 
         [Test]
-        public static void Constructor_MessageTemplate_InitializesSender()
+        public static void Constructor_EmailMessageTemplate_InitializesSender()
         {
             var sender = new EmailAddress();
-            var template = new MessageTemplate { Sender = sender };
+            var template = new EmailMessageTemplate { Sender = sender };
 
             var message = new EmailMessage(template);
 
@@ -40,13 +40,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
         [Test]
         [SuppressMessage("ReSharper", "CoVariantArrayConversion", Justification = "Type will match")]
-        public static void Constructor_MessageTemplate_InitializesRecipients()
+        public static void Constructor_EmailMessageTemplate_InitializesRecipients()
         {
             var recipient1 = new EmailAddress();
             var recipient2 = new EmailAddress();
             var recipients = new[] { recipient1, recipient2 };
 
-            var template = new MessageTemplate { Sender = new EmailAddress() };
+            var template = new EmailMessageTemplate { Sender = new EmailAddress() };
             template.Recipients.Add(recipient1);
             template.Recipients.Add(recipient2);
 
@@ -57,10 +57,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void Constructor_MessageTemplate_InitializesSubject()
+        public static void Constructor_EmailMessageTemplate_InitializesSubject()
         {
             const string subject = "Ant Morphology";
-            var template = new MessageTemplate
+            var template = new EmailMessageTemplate
             {
                 Sender = new EmailAddress(),
                 Subject = subject,
@@ -72,10 +72,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void Constructor_MessageTemplate_InitializesHtmlBody()
+        public static void Constructor_EmailMessageTemplate_InitializesHtmlBody()
         {
             var htmlBody = new EmailMessageBody();
-            var template = new MessageTemplate
+            var template = new EmailMessageTemplate
             {
                 Sender = new EmailAddress(),
                 HtmlBody = htmlBody,
@@ -87,10 +87,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void Constructor_MessageTemplate_InitializesTextBody()
+        public static void Constructor_EmailMessageTemplate_InitializesTextBody()
         {
             var textBody = new EmailMessageBody();
-            var template = new MessageTemplate
+            var template = new EmailMessageTemplate
             {
                 Sender = new EmailAddress(),
                 TextBody = textBody,

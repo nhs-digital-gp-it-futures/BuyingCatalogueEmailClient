@@ -15,15 +15,15 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// Initializes a new instance of the <see cref="EmailMessage"/> class
         /// using the provided <paramref name="template"/>.
         /// </summary>
-        /// <param name="template">The <see cref="MessageTemplate"/> to use to initialize
+        /// <param name="template">The <see cref="EmailMessageTemplate"/> to use to initialize
         /// the message.</param>
-        public EmailMessage(MessageTemplate template)
+        public EmailMessage(EmailMessageTemplate template)
         {
             if (template is null)
                 throw new ArgumentNullException(nameof(template));
 
             Sender = template.Sender ?? throw new ArgumentException(
-                $"{nameof(MessageTemplate.Sender)} must be provided.",
+                $"{nameof(EmailMessageTemplate.Sender)} must be provided.",
                 nameof(template));
 
             _recipients.AddRange(template.Recipients);
