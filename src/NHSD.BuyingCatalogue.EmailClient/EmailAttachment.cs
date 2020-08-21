@@ -14,6 +14,9 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// </summary>
         /// <param name="fileName">The file name of the attachment.</param>
         /// <param name="content">The content of the attachment.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="fileName"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="fileName"/> is empty or consists only of white space.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="content"/> is <see langref="null"/>.</exception>
         public EmailAttachment(string fileName, Stream content)
         {
             FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));

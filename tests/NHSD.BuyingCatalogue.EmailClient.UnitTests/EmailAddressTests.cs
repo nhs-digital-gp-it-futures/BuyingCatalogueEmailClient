@@ -10,13 +10,21 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     internal static class EmailAddressTests
     {
         [Test]
-        public static void Constructor_String_String_InitializesDisplayName()
+        public static void Constructor_String_InitializesAddress()
         {
-            const string name = "Some Body";
+            const string address = "somebody@notarealaddress.test";
 
-            var emailAddress = new EmailAddress(name, "a@b.test");
+            var emailAddress = new EmailAddress(address);
 
-            emailAddress.DisplayName.Should().Be(name);
+            emailAddress.Address.Should().Be(address);
+        }
+
+        [Test]
+        public static void Constructor_String_DoesNotInitializeDisplayName()
+        {
+            var emailAddress = new EmailAddress("somebody@notarealaddress.test");
+
+            emailAddress.DisplayName.Should().BeNull();
         }
 
         [Test]
@@ -24,9 +32,19 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string address = "somebody@notarealaddress.test";
 
-            var emailAddress = new EmailAddress("Name", address);
+            var emailAddress = new EmailAddress(address, "Name");
 
             emailAddress.Address.Should().Be(address);
+        }
+
+        [Test]
+        public static void Constructor_String_String_InitializesDisplayName()
+        {
+            const string name = "Some Body";
+
+            var emailAddress = new EmailAddress("a@b.test", name);
+
+            emailAddress.DisplayName.Should().Be(name);
         }
 
         [Test]

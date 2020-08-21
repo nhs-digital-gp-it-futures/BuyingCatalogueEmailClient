@@ -21,12 +21,12 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// Initializes a new instance of the <see cref="EmailAddress"/> class
         /// with the given display name and address.
         /// </summary>
-        /// <param name="displayName">An optional display name.</param>
         /// <param name="address">The actual e-mail address.</param>
-        public EmailAddress(string displayName, string address)
+        /// <param name="displayName">An optional display name.</param>
+        public EmailAddress(string address, string? displayName = null)
         {
-            DisplayName = displayName;
             Address = address;
+            DisplayName = displayName;
         }
 
         /// <summary>

@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
+using NHSD.BuyingCatalogue.EmailClient.Configuration;
 using NUnit.Framework;
 
-namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
+namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.Configuration
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]

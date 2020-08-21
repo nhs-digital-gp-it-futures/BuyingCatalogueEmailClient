@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using MailKit;
 using Microsoft.Extensions.Logging;
+using NHSD.BuyingCatalogue.EmailClient.Configuration;
 
 namespace NHSD.BuyingCatalogue.EmailClient
 {
@@ -24,6 +25,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <param name="logger">logger for log messages.</param>
         /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langref="null" />.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="settings" /> is <see langref="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="logger" /> is <see langref="null" />.</exception>
         [SuppressMessage(
             "Security",
             "CA5359:Do Not Disable Certificate Validation",
