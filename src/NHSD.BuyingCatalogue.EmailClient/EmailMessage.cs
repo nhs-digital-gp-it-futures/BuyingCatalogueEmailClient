@@ -45,7 +45,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         }
 
         /// <summary>
-        /// Gets or sets the sender (from address) of the message.
+        /// Gets the sender (from address) of the message.
         /// </summary>
         public EmailAddress Sender { get; }
 

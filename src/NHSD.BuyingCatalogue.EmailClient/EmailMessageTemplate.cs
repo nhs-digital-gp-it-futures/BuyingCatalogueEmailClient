@@ -13,7 +13,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         public EmailAddress? Sender { get; set; }
 
         /// <summary>
-        /// Gets or sets the recipients of the message.
+        /// Gets the recipients of the message.
         /// </summary>
         public IList<EmailAddress> Recipients { get; } = new List<EmailAddress>();
 
