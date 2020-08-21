@@ -12,27 +12,110 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     internal static class EmailMessageTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        public static void Constructor_MessageTemplate_NullTemplate_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new EmailMessage(((MessageTemplate)null)!));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        public static void Constructor_MessageTemplate_NullSender_ThrowsArgumentException()
+        {
+            var template = new MessageTemplate();
+
+            Assert.Throws<ArgumentException>(() => new EmailMessage(template));
+        }
+
+        [Test]
+        public static void Constructor_MessageTemplate_InitializesSender()
+        {
+            var sender = new EmailAddress();
+            var template = new MessageTemplate { Sender = sender };
+
+            var message = new EmailMessage(template);
+
+            message.Sender.Should().BeSameAs(sender);
+        }
+
+        [Test]
         [SuppressMessage("ReSharper", "CoVariantArrayConversion", Justification = "Type will match")]
-        public static void Constructor_EmailAddressArray_AddsExpectedRecipients()
+        public static void Constructor_MessageTemplate_InitializesRecipients()
+        {
+            var recipient1 = new EmailAddress();
+            var recipient2 = new EmailAddress();
+            var recipients = new[] { recipient1, recipient2 };
+
+            var template = new MessageTemplate { Sender = new EmailAddress() };
+            template.Recipients.Add(recipient1);
+            template.Recipients.Add(recipient2);
+
+            var message = new EmailMessage(template);
+
+            message.Recipients.Should().HaveCount(2);
+            message.Recipients.Should().BeEquivalentTo(recipients);
+        }
+
+        [Test]
+        public static void Constructor_MessageTemplate_InitializesSubject()
+        {
+            const string subject = "Ant Morphology";
+            var template = new MessageTemplate
+            {
+                Sender = new EmailAddress(),
+                Subject = subject,
+            };
+
+            var message = new EmailMessage(template);
+
+            message.Subject.Should().BeSameAs(subject);
+        }
+
+        [Test]
+        public static void Constructor_MessageTemplate_InitializesHtmlBody()
+        {
+            var htmlBody = new EmailMessageBody();
+            var template = new MessageTemplate
+            {
+                Sender = new EmailAddress(),
+                HtmlBody = htmlBody,
+            };
+
+            var message = new EmailMessage(template);
+
+            message.HtmlBody.Should().BeSameAs(htmlBody);
+        }
+
+        [Test]
+        public static void Constructor_MessageTemplate_InitializesTextBody()
+        {
+            var textBody = new EmailMessageBody();
+            var template = new MessageTemplate
+            {
+                Sender = new EmailAddress(),
+                TextBody = textBody,
+            };
+
+            var message = new EmailMessage(template);
+
+            message.TextBody.Should().BeSameAs(textBody);
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion", Justification = "Type will match")]
+        public static void Constructor_EmailAddress_EmailAddressArray_AddsExpectedRecipients()
         {
             var expectedRecipients = new[] { new EmailAddress(), new EmailAddress() };
 
-            var message = new EmailMessage(expectedRecipients);
+            var message = new EmailMessage(new EmailAddress(), expectedRecipients);
 
             message.Recipients.Should().BeEquivalentTo(expectedRecipients);
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Sender_Set_NullAddress_ThrowsException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new EmailMessage { Sender = null });
-        }
-
-        [Test]
         public static void HasAttachments_NoAttachments_ReturnsFalse()
         {
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
 
             message.HasAttachments.Should().BeFalse();
         }
@@ -40,7 +123,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void HasAttachments_WithAttachment_ReturnsTrue()
         {
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
             message.Attachments.Add(new EmailAttachment("fileName", Mock.Of<Stream>()));
 
             message.HasAttachments.Should().BeTrue();
@@ -49,7 +132,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AddFormatItems_NullFormatItems_ThrowsArgumentNullException()
         {
-            var body = new EmailMessage();
+            var body = new EmailMessage(new EmailAddress());
 
             Assert.Throws<ArgumentNullException>(() => body.AddFormatItems(null!));
         }
@@ -62,7 +145,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var expectedFormatItems = new object[] { one, two };
 
-            var message = new EmailMessage { HtmlBody = new EmailMessageBody() };
+            var message = new EmailMessage(new EmailAddress()) { HtmlBody = new EmailMessageBody() };
             message.AddFormatItems(one, two);
 
             message.HtmlBody!.FormatItems.Should().BeEquivalentTo(expectedFormatItems);
@@ -76,7 +159,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var expectedFormatItems = new object[] { one, two };
 
-            var message = new EmailMessage { TextBody = new EmailMessageBody() };
+            var message = new EmailMessage(new EmailAddress()) { TextBody = new EmailMessageBody() };
             message.AddFormatItems(one, two);
 
             message.TextBody!.FormatItems.Should().BeEquivalentTo(expectedFormatItems);
@@ -85,7 +168,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AddRecipient_String_String_NullAddress_ThrowsArgumentNullException()
         {
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
 
             Assert.Throws<ArgumentNullException>(() => message.AddRecipient(((string)null)!));
         }
@@ -94,7 +177,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [TestCase("\t")]
         public static void AddRecipient_String_String_EmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
         {
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
 
             Assert.Throws<ArgumentException>(() => message.AddRecipient(address));
         }
@@ -107,7 +190,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var expectedEmailAddress = new EmailAddress(address, displayName);
 
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
             message.AddRecipient(address, displayName);
 
             message.Recipients.Should().HaveCount(1);
@@ -119,7 +202,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AddRecipient_EmailAddress_NullAddress_ThrowsArgumentNullException()
         {
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
 
             Assert.Throws<ArgumentNullException>(() => message.AddRecipient(null!));
         }
@@ -129,7 +212,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             var expectedEmailAddress = new EmailAddress("a@b.test", "Miss Address");
 
-            var message = new EmailMessage();
+            var message = new EmailMessage(new EmailAddress());
             message.AddRecipient(expectedEmailAddress);
 
             message.Recipients.Should().HaveCount(1);

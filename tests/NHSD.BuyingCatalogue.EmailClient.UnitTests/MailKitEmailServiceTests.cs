@@ -94,9 +94,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             await service.SendEmailAsync(
-                new EmailMessage(new EmailAddress("to@recipient.test"))
+                new EmailMessage(
+                    new EmailAddress("from@sender.test"),
+                    new EmailAddress("to@recipient.test"))
                 {
-                    Sender = new EmailAddress("from@sender.test"),
                     Subject = "subject",
                 });
 
@@ -121,9 +122,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                     It.IsAny<ITransferProgress>()))
                 .ThrowsAsync(new ServiceNotAuthenticatedException());
 
-            var message = new EmailMessage(new EmailAddress("to@recipient.test"))
+            var message = new EmailMessage(
+                new EmailAddress("from@sender.test"),
+                new EmailAddress("to@recipient.test"))
             {
-                Sender = new EmailAddress("from@sender.test"),
                 Subject = "subject",
             };
 
@@ -152,9 +154,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                     It.IsAny<ITransferProgress>()))
                 .ThrowsAsync(new ServiceNotConnectedException());
 
-            var message = new EmailMessage(new EmailAddress("to@recipient.test"))
+            var message = new EmailMessage(
+                new EmailAddress("from@sender.test"),
+                new EmailAddress("to@recipient.test"))
             {
-                Sender = new EmailAddress("from@sender.test"),
                 Subject = "subject",
             };
 
@@ -204,9 +207,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             await service.SendEmailAsync(
-                new EmailMessage(new EmailAddress("to@recipient.test"))
+                new EmailMessage(
+                    new EmailAddress("from@sender.test"),
+                    new EmailAddress("to@recipient.test"))
                 {
-                    Sender = new EmailAddress("from@sender.test"),
                     Subject = "subject",
                 });
 
@@ -229,9 +233,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             await service.SendEmailAsync(
-                new EmailMessage(new EmailAddress("to@recipient.test"))
+                new EmailMessage(
+                    new EmailAddress("from@sender.test"),
+                    new EmailAddress("to@recipient.test"))
                 {
-                    Sender = new EmailAddress("from@sender.test"),
                     Subject = "subject",
                 });
 
@@ -256,9 +261,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             var subject = Guid.NewGuid().ToString();
 
             await service.SendEmailAsync(
-                new EmailMessage(new EmailAddress("to@recipient.test"))
+                new EmailMessage(
+                    new EmailAddress("from@sender.test"),
+                    new EmailAddress("to@recipient.test"))
                 {
-                    Sender = new EmailAddress("from@sender.test"),
                     Subject = subject,
                 });
 
@@ -283,10 +289,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             await service.SendEmailAsync(
-                new EmailMessage(new EmailAddress("to@recipient.test"))
-                {
-                    Sender = new EmailAddress("from@sender.test"),
-                });
+                new EmailMessage(
+                    new EmailAddress("from@sender.test"),
+                    new EmailAddress("to@recipient.test")));
 
             mockTransport.Verify(
                 t => t.SendAsync(
@@ -309,9 +314,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             await service.SendEmailAsync(
-                new EmailMessage(new EmailAddress("to@recipient.test"))
+                new EmailMessage(
+                    new EmailAddress("from@sender.test"),
+                    new EmailAddress("to@recipient.test"))
                 {
-                    Sender = new EmailAddress("from@sender.test"),
                     Subject = "subject",
                 });
 
@@ -334,9 +340,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                     It.IsAny<ITransferProgress>()))
                 .ThrowsAsync(new SmtpFailedRecipientException(SmtpStatusCode.ServiceNotAvailable, "to@recipient.test"));
 
-            var message = new EmailMessage(new EmailAddress("to@recipient.test"))
+            var message = new EmailMessage(
+                new EmailAddress("from@sender.test"),
+                new EmailAddress("to@recipient.test"))
             {
-                Sender = new EmailAddress { Address = "from@sender.test" },
                 Subject = "subject",
             };
 

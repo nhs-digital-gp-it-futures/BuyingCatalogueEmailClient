@@ -10,34 +10,44 @@ namespace NHSD.BuyingCatalogue.EmailClient
     public sealed class EmailMessage
     {
         private readonly List<EmailAddress> _recipients = new List<EmailAddress>();
-        private EmailAddress? _sender;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmailMessage"/> class.
+        /// Initializes a new instance of the <see cref="EmailMessage"/> class
+        /// using the provided <paramref name="template"/>.
         /// </summary>
-        public EmailMessage()
+        /// <param name="template">The <see cref="MessageTemplate"/> to use to initialize
+        /// the message.</param>
+        public EmailMessage(MessageTemplate template)
         {
+            if (template is null)
+                throw new ArgumentNullException(nameof(template));
+
+            Sender = template.Sender ?? throw new ArgumentException(
+                $"{nameof(MessageTemplate.Sender)} must be provided.",
+                nameof(template));
+
+            _recipients.AddRange(template.Recipients);
+            Subject = template.Subject;
+            HtmlBody = template.HtmlBody;
+            TextBody = template.TextBody;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailMessage"/> class
         /// with the specified <paramref name="recipients"/>.
         /// </summary>
+        /// <param name="sender">The address of the sender of the message.</param>
         /// <param name="recipients">The recipients of the message.</param>
-        public EmailMessage(params EmailAddress[] recipients)
+        public EmailMessage(EmailAddress sender, params EmailAddress[] recipients)
         {
+            Sender = sender;
             _recipients.AddRange(recipients);
         }
 
         /// <summary>
         /// Gets or sets the sender (from address) of the message.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
-        public EmailAddress? Sender
-        {
-            get => _sender;
-            set => _sender = value ?? throw new ArgumentNullException(nameof(value));
-        }
+        public EmailAddress Sender { get; }
 
         /// <summary>
         /// Gets the recipients of the message.
