@@ -10,7 +10,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 
         private EmailResponseAttachmentBuilder()
         {
-            ContentType = "application/json";
+            ContentType = MediaTypeNames.Application.Json;
             FileName = "attachment1.txt";
         }
 
@@ -21,7 +21,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 
         public EmailResponseAttachment Build()
         {
-            return new EmailResponseAttachment(ContentType,FileName);
+            return new EmailResponseAttachment(ContentType, FileName);
         }
     }
 }

@@ -15,11 +15,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class EmailAttachmentTests
     {
+        const string fileName = "file.pdf";
+        private static readonly ContentType contentType = new ContentType(MediaTypeNames.Application.Json);
+
         [Test]
         public static void Constructor_InitializesFileName()
         {
-            const string fileName = "file.pdf";
-            var contentType = new ContentType("application/json");
             var attachment = new EmailAttachmentData("id1", fileName, contentType);
             attachment.FileName.Should().Be(fileName);
         }
@@ -27,8 +28,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         [Test]
         public static void Constructor_InitializesContent()
         {
-            const string fileName = "file.pdf";
-            var contentType = new ContentType("application/json");
             var attachment = new EmailAttachmentData("Id", fileName, contentType);
             attachment.ContentType.Should().BeEquivalentTo(contentType);
         }
@@ -36,9 +35,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         [Test]
         public static void Constructor_InitializesId()
         {
-            const string fileName = "file.pdf";
             var emailId = "Id";
-            var contentType = new ContentType("application/json");
             var attachment = new EmailAttachmentData(emailId, fileName, contentType);
             attachment.Id.Should().BeEquivalentTo(emailId);
         }

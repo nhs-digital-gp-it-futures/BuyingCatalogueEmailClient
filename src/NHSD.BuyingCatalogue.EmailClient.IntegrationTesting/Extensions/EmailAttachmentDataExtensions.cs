@@ -23,12 +23,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Extensions
         /// <returns></returns>
         public static async Task<byte[]> DownloadDataAsync(this EmailAttachmentData  attachment, EmailServerDriverSettings settings)
         {
-            if (attachment == null)
+            if (attachment is null)
             {
                 throw new ArgumentNullException(nameof(attachment));
             }
 
-            if (settings==null)
+            if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }

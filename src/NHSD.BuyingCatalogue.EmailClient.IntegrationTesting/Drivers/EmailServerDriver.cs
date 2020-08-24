@@ -74,7 +74,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 
         private Email ProcessEmailResponse(EmailResponse response)
         {
-            if (response == null)
+            if (response is null)
             {
                 throw new ArgumentNullException(nameof(response));
             }
@@ -106,7 +106,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 
         private static List<EmailAttachmentData> ExtractAttachmentsMetadata(EmailResponse emailResponse)
         {
-            if (emailResponse == null)
+            if (emailResponse is null)
             {
                 throw new ArgumentNullException(nameof(emailResponse));
             }

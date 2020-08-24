@@ -6,12 +6,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
     internal sealed class EmailServerDriverResponseBuilder
     {
         private static int IdNumber = 0;
-        private List<EmailAddress> _to = new List<EmailAddress>();
-        private List<EmailAddress> _from = new List<EmailAddress>();
+        private readonly List<EmailAddress> _to = new List<EmailAddress>();
+        private readonly List<EmailAddress> _from = new List<EmailAddress>();
         private string _subject;
         private string _html;
         private string _text;
-        private List<EmailResponseAttachment> _attachmentContent;
+        private readonly List<EmailResponseAttachment> _attachmentContent =new List<EmailResponseAttachment>();
 
         private EmailServerDriverResponseBuilder()
         {
@@ -20,7 +20,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             _subject = "important email.";
             _text = "Dear Sir or Madam";
             _html = "<p/>";
-            _attachmentContent = new List<EmailResponseAttachment> {EmailResponseAttachmentBuilder.Create().Build()};
+            _attachmentContent.Add(EmailResponseAttachmentBuilder.Create().Build());
         }
 
         public static EmailServerDriverResponseBuilder Create()
@@ -36,7 +36,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             }
             else
             {
-                _to.Add(new EmailAddress(name,address));
+                _to.Add(new EmailAddress(name, address));
             }
 
             return this;
@@ -75,9 +75,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 
         public EmailServerDriverResponseBuilder WithAttachmentContent(EmailResponseAttachment attachmentMetadata)
         {
-            if (attachmentMetadata == null)
+            if (attachmentMetadata is null)
             {
-                _attachmentContent = new List<EmailResponseAttachment>();
+                _attachmentContent.Clear();
             }
             else
             {
@@ -95,6 +95,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
                 Subject = _subject,
                 Text = _text
             };
+
             response.To.AddRange(_to);
             response.From.AddRange(_from);
             response.Attachments.AddRange(_attachmentContent);

@@ -151,6 +151,5 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 Encoding.UTF8.GetString(data).Should().Be("This is the attachment");
             }
         }
-
     }
 }

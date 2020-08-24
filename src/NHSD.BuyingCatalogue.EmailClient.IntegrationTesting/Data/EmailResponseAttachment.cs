@@ -8,7 +8,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     /// <summary>
     /// EmailResponseAttachment represents the attachments found in a email response from the MailDev API.
     /// </summary>
-    public class EmailResponseAttachment
+    public sealed class EmailResponseAttachment
     {
         /// <summary>
         /// The Content Type associated with the attachment.
