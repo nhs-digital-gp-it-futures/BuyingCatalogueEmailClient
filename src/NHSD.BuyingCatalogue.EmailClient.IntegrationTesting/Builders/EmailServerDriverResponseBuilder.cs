@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 
-namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
+namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 {
     internal sealed class EmailServerDriverResponseBuilder
     {
+        private static int IdNumber = 0;
         private List<EmailAddress> _to = new List<EmailAddress>();
         private List<EmailAddress> _from = new List<EmailAddress>();
         private string _subject;
         private string _html;
         private string _text;
-        private AttachmentStream _attachmentContent;
+        private List<EmailResponseAttachment> _attachmentContent;
 
         private EmailServerDriverResponseBuilder()
         {
-            _to.Add(new EmailAddress("recpient@email.com"));
-            _from.Add(new EmailAddress("sender@email.com"));
+            _to.Add(new EmailAddress("recpient","recpient@email.com"));
+            _from.Add(new EmailAddress("sender","sender@email.com"));
             _subject = "important email.";
             _text = "Dear Sir or Madam";
             _html = "<p/>";
-            _attachmentContent = AttachmentStreamBuilder.Create().Build();
+            _attachmentContent = new List<EmailResponseAttachment> {EmailResponseAttachmentBuilder.Create().Build()};
         }
 
-        static public EmailServerDriverResponseBuilder Create()
+        public static EmailServerDriverResponseBuilder Create()
         {
             return new EmailServerDriverResponseBuilder();
         }
 
-        public EmailServerDriverResponseBuilder WithTo(string address)
+        public EmailServerDriverResponseBuilder WithTo(string name,string address)
         {
             if (address == null)
             {
@@ -36,13 +36,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
             }
             else
             {
-                _to.Add(new EmailAddress(address));
+                _to.Add(new EmailAddress(name,address));
             }
 
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithFrom(string address)
+        public EmailServerDriverResponseBuilder WithFrom(string name, string address)
         {
             if (address == null)
             {
@@ -50,9 +50,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
             }
             else
             {
-                _from.Add(new EmailAddress(address));
+                _from.Add(new EmailAddress(name, address));
             }
-
             return this;
         }
 
@@ -74,19 +73,27 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithAttachmentContent(AttachmentStream attachmentStream)
+        public EmailServerDriverResponseBuilder WithAttachmentContent(EmailResponseAttachment attachmentMetadata)
         {
-            _attachmentContent = attachmentStream;
+            if (attachmentMetadata == null)
+            {
+                _attachmentContent = new List<EmailResponseAttachment>();
+            }
+            else
+            {
+                _attachmentContent.Add(attachmentMetadata);
+            }
             return this;
         }
 
-        public EmailServerDriverResponse Build()
+        public EmailResponse Build()
         {
-            return  new EmailServerDriverResponse
+            return  new EmailResponse
             {
-                To=_to,
+                Id = @"ID"+ (++IdNumber),
+                To =_to,
                 From = _from,
-                Attachment = _attachmentContent,
+                Attachments = _attachmentContent,
                 Html = _html,
                 Subject = _subject,
                 Text = _text

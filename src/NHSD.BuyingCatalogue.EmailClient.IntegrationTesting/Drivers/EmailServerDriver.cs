@@ -9,8 +9,9 @@ using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Utils;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist.ValueRetrievers;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Extensions;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
@@ -20,7 +21,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     [Binding]
     public sealed class EmailServerDriver
     {
-        private readonly EmailServerDriverSettings EmailServerDriverSettings;
+        private readonly EmailServerDriverSettings _emailServerDriverSettings;
 
         /// <summary>
         /// EmailServerDriver allows access to the contents of a SMTP mail server.
@@ -28,7 +29,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <param name="emailServerDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
         public EmailServerDriver(EmailServerDriverSettings emailServerDriverSettings)
         {
-            EmailServerDriverSettings = emailServerDriverSettings ?? throw new ArgumentNullException(nameof(emailServerDriverSettings));
+            _emailServerDriverSettings = emailServerDriverSettings ?? throw new ArgumentNullException(nameof(emailServerDriverSettings));
         }
 
         /// <summary>
@@ -41,27 +42,35 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
             return emailList.Count;
         }
 
+        public async Task<byte[]> DownloadAttachment(EmailAttachmentData attachment)
+        {
+            return await attachment.DownloadDataAsync(_emailServerDriverSettings);
+        }
+
         /// <summary>
         /// FindAllEmailsAsync gets email objects from the SMTP service.
         /// </summary>
         /// <returns>A IReadOnlyList of <see cref="Email"/></returns>
         public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
         {
-            var responseBody = await EmailServerDriverSettings
+            var responseBody = await _emailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegment("email")
-                .GetJsonListAsync();
+                .GetJsonAsync<EmailResponse[]>();
 
-            return responseBody.Select(x => new Email
+            var emails=  responseBody.Select(x => new Email
             {
-                PlainTextBody = x.text,
-                HtmlBody = x.html,
-                Subject = x.subject,
-                From = x.from[0].address,
-                To = x.to[0].address,
-                Attachment = ExtractAttachment(x)
+                PlainTextBody = x.Text,
+                HtmlBody = x.Html,
+                Subject = x.Subject,
+                From = x.From[0].Address,
+                To = x.To[0].Address,
+                Attachments = ExtractAttachmentsMetadata(x)
             }).ToList();
+
+            return emails;
+
         }
 
         /// <summary>
@@ -70,26 +79,32 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns><see cref="Task" /></returns>
         public async Task ClearAllEmailsAsync()
         {
-            await EmailServerDriverSettings
+            await _emailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegments("email", "all")
                 .DeleteAsync();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "<Pending>")]
-        private static EmailAttachment? ExtractAttachment(dynamic x)
+        private static List<EmailAttachmentData> ExtractAttachmentsMetadata(EmailResponse emailResponse)
         {
-            if (x.attachment == null)
+            if (emailResponse == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(emailResponse));
             }
 
-            byte[] byteArray = Encoding.ASCII.GetBytes(x.attachment.stream.ToString().Trim());
-            var stream = new MemoryStream(byteArray);
-            var fileName = x.attachment.fileName.Trim();
-            var contentType = x.attachment.contentType.Trim();
-            return new EmailAttachment(stream, fileName, new ContentType(contentType));
+            var attachmentResults = new List<EmailAttachmentData>();
+            var emailId = emailResponse.Id ?? throw new NullReferenceException();
+            var attachments = emailResponse.Attachments;
+            
+            foreach (var attachment in attachments)
+            {
+                string fileName = attachment.FileName ?? throw new NullReferenceException();
+                var contentType = attachment.ContentType;
+                var result = new EmailAttachmentData(emailId, fileName, new ContentType(contentType));
+                attachmentResults.Add(result);
+            }
+            return attachmentResults;
         }
     }
 }

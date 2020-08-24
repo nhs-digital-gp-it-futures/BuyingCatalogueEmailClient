@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Flurl.Http.Testing;
 using Newtonsoft.Json;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Extensions;
 using NUnit.Framework;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
@@ -49,7 +51,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
             var driver = new EmailServerDriver(settings);
             using (var httpTest = new HttpTest())
             {
-                var responseList = new List<EmailServerDriverResponse>()
+                var responseList = new List<EmailResponse>()
                 {
                     EmailServerDriverResponseBuilder.Create().Build(),
                     EmailServerDriverResponseBuilder.Create().Build()
@@ -77,7 +79,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                     .WithSubject("Subject2")
                     .Build();
 
-                var responseList = new List<EmailServerDriverResponse>{email, secondEmail };
+                var responseList = new List<EmailResponse> {email, secondEmail };
 
                 httpTest.RespondWithJson(responseList);
                 var resultEmails = await driver.FindAllEmailsAsync();
@@ -100,7 +102,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                     .WithSubject("Subject1")
                     .Build();
 
-                var responseList = new List<EmailServerDriverResponse> { email};
+                var responseList = new List<EmailResponse> { email};
 
                 httpTest.RespondWithJson(responseList);
                 var resultEmail = (await driver.FindAllEmailsAsync()).Single();
@@ -113,10 +115,42 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 resultEmail.Subject.Should().Be(email.Subject);
                 resultEmail.PlainTextBody.Should().Be(email.Text);
                 resultEmail.HtmlBody.Should().Be(email.Html);
-                resultEmail.Attachment.ContentAsString.Should().Be(email.Attachment.Stream);
-                resultEmail.Attachment.Name.Should().Be(email.Attachment.FileName);
-                resultEmail.Attachment.ContentType.MediaType.Should().BeEquivalentTo(email.Attachment.ContentType);
+
+                resultEmail.Attachments[0].Id.Should().Be(email.Id);
+                resultEmail.Attachments[0].FileName.Should().Be(email.Attachments[0].FileName);
+                resultEmail.Attachments[0].ContentType.MediaType.Should().BeEquivalentTo(email.Attachments[0].ContentType);
             }
         }
+
+        [Test]
+        public static async Task EmailServerDriver_DownloadAttachmentAsync_DownloadaData()
+        {
+            var settings = new EmailServerDriverSettings(new Uri("http://email.com/"));
+            var driver = new EmailServerDriver(settings);
+            using (var httpTest = new HttpTest())
+            {
+                var email = EmailServerDriverResponseBuilder.Create()
+                    .WithSubject("Subject1")
+                    .Build();
+
+                var responseList = new List<EmailResponse> { email };
+
+                httpTest.RespondWithJson(responseList);
+                var resultEmail = (await driver.FindAllEmailsAsync()).Single();
+
+                httpTest.ShouldHaveCalled("http://email.com/email")
+                    .WithVerb(HttpMethod.Get);
+
+                httpTest.RespondWith("This is the attachment");
+
+                var data = await resultEmail.Attachments.First().DownloadDataAsync(settings);
+
+                httpTest.ShouldHaveCalled("http://email.com/email/ID*/attachment/attachment1.txt")
+                    .WithVerb(HttpMethod.Get);
+
+                Encoding.UTF8.GetString(data).Should().Be("This is the attachment");
+            }
+        }
+
     }
 }

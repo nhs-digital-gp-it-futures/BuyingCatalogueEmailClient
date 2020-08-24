@@ -1,4 +1,4 @@
-﻿using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Utils;
+﻿using System.Collections.Generic;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
@@ -35,6 +35,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets or sets Attachment
         /// </summary>
-        public EmailAttachment? Attachment { get; set; }
+        public List<EmailAttachmentData>? Attachments { get; set; }
     }
 }
