@@ -42,6 +42,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
             return emailList.Count;
         }
 
+        /// <summary>
+        /// Gets the binary data associated with the attachment
+        /// </summary>
+        /// <param name="attachment">Attachment data <see cref="EmailAttachmentData"/></param>
+        /// <returns></returns>
         public async Task<byte[]> DownloadAttachment(EmailAttachmentData attachment)
         {
             return await attachment.DownloadDataAsync(_emailServerDriverSettings);
@@ -59,18 +64,27 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .AppendPathSegment("email")
                 .GetJsonAsync<EmailResponse[]>();
 
-            var emails=  responseBody.Select(x => new Email
-            {
-                PlainTextBody = x.Text,
-                HtmlBody = x.Html,
-                Subject = x.Subject,
-                From = x.From[0].Address,
-                To = x.To[0].Address,
-                Attachments = ExtractAttachmentsMetadata(x)
-            }).ToList();
-
+            var emails=  responseBody.Select(ProcessEmailResponse).ToList();
             return emails;
+        }
 
+        private Email ProcessEmailResponse(EmailResponse response)
+        {
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+
+            var email= new Email
+                {
+                    PlainTextBody = response.Text,
+                    HtmlBody = response.Html,
+                    Subject = response.Subject
+                };
+            email.From.AddRange(response.From.Where(x=> x!=null));
+            email.To.AddRange(response.To.Where(x=> x!=null));
+            email.Attachments.AddRange(ExtractAttachmentsMetadata(response));
+            return email;
         }
 
         /// <summary>
@@ -93,16 +107,22 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 throw new ArgumentNullException(nameof(emailResponse));
             }
 
-            var attachmentResults = new List<EmailAttachmentData>();
-            var emailId = emailResponse.Id ?? throw new NullReferenceException();
-            var attachments = emailResponse.Attachments;
             
-            foreach (var attachment in attachments)
+
+            var attachmentResults = new List<EmailAttachmentData>();
+
+            if (emailResponse.Attachments != null)
             {
-                string fileName = attachment.FileName ?? throw new NullReferenceException();
-                var contentType = attachment.ContentType;
-                var result = new EmailAttachmentData(emailId, fileName, new ContentType(contentType));
-                attachmentResults.Add(result);
+                var emailId = emailResponse.Id ?? throw new NullReferenceException();
+                var attachments = emailResponse.Attachments;
+
+                foreach (var attachment in attachments)
+                {
+                    string fileName = attachment.FileName ?? throw new NullReferenceException();
+                    var contentType = attachment.ContentType;
+                    var result = new EmailAttachmentData(emailId, fileName, new ContentType(contentType));
+                    attachmentResults.Add(result);
+                }
             }
             return attachmentResults;
         }

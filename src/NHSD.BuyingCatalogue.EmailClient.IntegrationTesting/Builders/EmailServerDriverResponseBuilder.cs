@@ -28,11 +28,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             return new EmailServerDriverResponseBuilder();
         }
 
-        public EmailServerDriverResponseBuilder WithTo(string name,string address)
+        public EmailServerDriverResponseBuilder WithTo(string address, string name="anonymous")
         {
-            if (address == null)
+            if (address == null )
             {
-                _to = new List<EmailAddress>();
+                _to.Clear();
             }
             else
             {
@@ -42,11 +42,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithFrom(string name, string address)
+        public EmailServerDriverResponseBuilder WithFrom(string address, string name="anonymous")
         {
             if (address == null)
             {
-                _from = new List<EmailAddress>();
+                _from.Clear();
             }
             else
             {
@@ -88,16 +88,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 
         public EmailResponse Build()
         {
-            return  new EmailResponse
+            var response= new EmailResponse
             {
                 Id = @"ID"+ (++IdNumber),
-                To =_to,
-                From = _from,
-                Attachments = _attachmentContent,
                 Html = _html,
                 Subject = _subject,
                 Text = _text
             };
+            response.To.AddRange(_to);
+            response.From.AddRange(_from);
+            response.Attachments.AddRange(_attachmentContent);
+            return response;
         }
     }
 }

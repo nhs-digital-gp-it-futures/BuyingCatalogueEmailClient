@@ -110,8 +110,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 httpTest.ShouldHaveCalled("http://email.com/email")
                     .WithVerb(HttpMethod.Get);
 
-                resultEmail.From.Should().Be(email.From[0].Address);
-                resultEmail.To.Should().Be(email.To[0].Address);
+                resultEmail.From.Should().BeEquivalentTo(email.From);
+                resultEmail.To.Should().BeEquivalentTo(email.To);
                 resultEmail.Subject.Should().Be(email.Subject);
                 resultEmail.PlainTextBody.Should().Be(email.Text);
                 resultEmail.HtmlBody.Should().Be(email.Html);

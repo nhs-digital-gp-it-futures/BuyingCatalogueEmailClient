@@ -10,12 +10,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets or sets From.
         /// </summary>
-        public string? From { get; set; }
+        public List<EmailAddress> From { get; } = new List<EmailAddress>();
 
         /// <summary>
         /// Gets or sets To.
         /// </summary>
-        public string? To { get; set; }
+        public List<EmailAddress> To { get;} = new List<EmailAddress>();
 
         /// <summary>
         /// Gets or sets Subject.
@@ -35,6 +35,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets or sets Attachment
         /// </summary>
-        public List<EmailAttachmentData>? Attachments { get; set; }
+        public List<EmailAttachmentData> Attachments { get; } = new List<EmailAttachmentData>();
     }
 }
