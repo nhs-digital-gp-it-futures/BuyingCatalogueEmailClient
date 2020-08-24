@@ -17,7 +17,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string name = "Some Body";
 
-            var emailAddress = new EmailAddress(name, "a@b.test");
+            var emailAddress = new EmailAddress("a@b.test", name);
             var mailboxAddress = emailAddress.AsMailboxAddress();
 
             mailboxAddress.Should().BeOfType<MailboxAddress>();
@@ -28,7 +28,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string name = "Some Body";
 
-            var emailAddress = new EmailAddress(name, "a@b.test");
+            var emailAddress = new EmailAddress("a@b.test", name);
             var mailboxAddress = emailAddress.AsMailboxAddress();
 
             mailboxAddress.Name.Should().Be(name);
@@ -39,7 +39,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string address = "somebody@notarealaddress.test";
 
-            var emailAddress = new EmailAddress("Name", address);
+            var emailAddress = new EmailAddress(address, "Name");
             var mailboxAddress = emailAddress.AsMailboxAddress();
 
             mailboxAddress.Should().BeOfType<MailboxAddress>();
@@ -49,11 +49,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_NullSubject_SetsSubjectToEmptyString()
         {
-            var emailMessage = new EmailMessage
-            {
-                Sender = new EmailAddress { Address = "a@b.uk" },
-                Recipient = new EmailAddress { Address = "a@b.uk" },
-            };
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"));
 
             var mimeMessage = emailMessage.AsMimeMessage(string.Empty);
 
@@ -63,11 +61,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_ReturnsExpectedType()
         {
-            var emailMessage = new EmailMessage
-            {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.nhs.test" },
-            };
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"));
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -79,11 +75,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string sender = "sender@somedomain.test";
 
-            var emailMessage = new EmailMessage
-            {
-                Sender = new EmailAddress { Address = sender },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.test" },
-            };
+            var emailMessage = new EmailMessage(
+                new EmailAddress(sender),
+                new EmailAddress("recipient@somedomain.test"));
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -93,21 +87,21 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        public static void AsMimeMessage_InitializesRecipient()
+        public static void AsMimeMessage_InitializesRecipients()
         {
-            const string recipient = "recipient@somedomain.test";
+            const string recipient1 = "recipient1@somedomain.test";
+            const string recipient2 = "recipient2@somedomain.test";
 
-            var emailMessage = new EmailMessage
-            {
-                Sender = new EmailAddress { Address = "sender@somedomain.test" },
-                Recipient = new EmailAddress { Address = recipient },
-            };
+            var recipients = new[] { new EmailAddress(recipient1), new EmailAddress(recipient2) };
+
+            var emailMessage = new EmailMessage(new EmailAddress("sender@somedomain.nhs.test"), recipients);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
             IEnumerable<InternetAddress> to = mimeMessage.To;
-            to.Should().HaveCount(1);
-            to.First().As<MailboxAddress>().Address.Should().Be(recipient);
+            to.Should().HaveCount(2);
+            to.First().As<MailboxAddress>().Address.Should().Be(recipient1);
+            to.Last().As<MailboxAddress>().Address.Should().Be(recipient2);
         }
 
         [Test]
@@ -115,10 +109,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Subject";
 
-            var emailMessage = new EmailMessage
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"))
             {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.nhs.test" },
                 Subject = subject,
             };
 
@@ -134,10 +128,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Subject";
 
-            var emailMessage = new EmailMessage
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"))
             {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.nhs.test" },
                 Subject = subject,
             };
 
@@ -152,10 +146,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             const string emailSubjectPrefix = "Prefix";
             const string subject = "Subject";
 
-            var emailMessage = new EmailMessage
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"))
             {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.nhs.test" },
                 Subject = subject,
             };
 
@@ -167,35 +161,35 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_InitializesHtmlBody()
         {
-            const string htmlBody = "HTML";
+            const string expectedContent = "HTML";
 
-            var emailMessage = new EmailMessage
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"))
             {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.nhs.test" },
-                HtmlBody = htmlBody,
+                HtmlBody = new EmailMessageBody(expectedContent),
             };
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
-            mimeMessage.HtmlBody.Should().Be(htmlBody);
+            mimeMessage.HtmlBody.Should().Be(expectedContent);
         }
 
         [Test]
         public static void AsMimeMessage_InitializesTextBody()
         {
-            const string textBody = "Text";
+            const string expectedContent = "Text";
 
-            var emailMessage = new EmailMessage
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.nhs.test"))
             {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.nhs.test" },
-                TextBody = textBody,
+                TextBody = new EmailMessageBody(expectedContent),
             };
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
-            mimeMessage.TextBody.Should().Be(textBody);
+            mimeMessage.TextBody.Should().Be(expectedContent);
         }
 
         [Test]
@@ -205,11 +199,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             const string content = "Hello World";
             using var contentStream = new MemoryStream(Encoding.ASCII.GetBytes(content));
 
-            var emailMessage = new EmailMessage
-            {
-                Sender = new EmailAddress { Address = "sender@somedomain.nhs.test" },
-                Recipient = new EmailAddress { Address = "recipient@somedomain.test" },
-            };
+            var emailMessage = new EmailMessage(
+                new EmailAddress("sender@somedomain.nhs.test"),
+                new EmailAddress("recipient@somedomain.test"));
 
             emailMessage.Attachments.Add(new EmailAttachment(fileName, contentStream));
 

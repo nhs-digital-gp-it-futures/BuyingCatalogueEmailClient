@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
@@ -16,15 +17,18 @@ using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Extensions;
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
     /// <summary>
-    ///  Manages interaction with a SMTP server.
+    /// Provides functionality for executing integration tests
+    /// that test e-mail functionality.
     /// </summary>
     [Binding]
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API")]
     public sealed class EmailServerDriver
     {
         private readonly EmailServerDriverSettings _emailServerDriverSettings;
 
         /// <summary>
-        /// EmailServerDriver allows access to the contents of a SMTP mail server.
+        /// Initializes a new instance of the <see cref="EmailServerDriver" /> class
+        /// with the supplied settings.
         /// </summary>
         /// <param name="emailServerDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
         public EmailServerDriver(EmailServerDriverSettings emailServerDriverSettings)
@@ -33,9 +37,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         }
 
         /// <summary>
-        /// Gets the number of emails in the mailbox.
+        /// Returns the number of e-mails in the mailbox.
         /// </summary>
-        /// <returns>the number of <see cref="Email"/> sent</returns>
+        /// <returns>the number of e-mails in the mailbox.</returns>
         public async Task<int> GetEmailCountAsync()
         {
             var emailList = await FindAllEmailsAsync();
@@ -55,7 +59,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <summary>
         /// FindAllEmailsAsync gets email objects from the SMTP service.
         /// </summary>
-        /// <returns>A IReadOnlyList of <see cref="Email"/></returns>
+        /// <returns>a list containing all e-mails in the mailbox.</returns>
         public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
         {
             var responseBody = await _emailServerDriverSettings
@@ -88,9 +92,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         }
 
         /// <summary>
-        /// ClearAllEmailsAsync deletes all emails from the SMTP service.
+        /// Deletes all e-mails from the mailbox.
         /// </summary>
-        /// <returns><see cref="Task" /></returns>
+        /// <returns>An asynchronous <see cref="Task" /> context.</returns>
         public async Task ClearAllEmailsAsync()
         {
             await _emailServerDriverSettings
@@ -106,8 +110,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
             {
                 throw new ArgumentNullException(nameof(emailResponse));
             }
-
-            
 
             var attachmentResults = new List<EmailAttachmentData>();
 
