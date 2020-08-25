@@ -82,7 +82,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
             var email= new Email
                 {
                     PlainTextBody = response.Text,
-                    HtmlBody = response.Html,
+                    //HtmlBody = response.Html,
                     Subject = response.Subject
                 };
             email.From.AddRange(response.From.Where(x=> x!=null));
