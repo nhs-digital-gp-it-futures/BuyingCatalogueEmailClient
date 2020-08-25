@@ -15,11 +15,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// </summary>
         [JsonProperty("contentType")]
         public string? ContentType { get; set; }
+
         /// <summary>
         /// The file name of the attachment.
         /// </summary>
         [JsonProperty("fileName")]
         public string? FileName { get; set; }
+
         /// <summary>
         /// Represents metadata found in the Attachment section of a MailDev Email api response.
         /// </summary>
