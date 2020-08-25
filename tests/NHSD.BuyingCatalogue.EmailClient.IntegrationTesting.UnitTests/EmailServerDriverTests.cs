@@ -14,17 +14,16 @@ using Newtonsoft.Json;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Extensions;
 using NUnit.Framework;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
-    internal class EmailServerDriverTests
+    internal static class EmailServerDriverTests
     {
         [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        //[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
         public static void Constructor_NullMessage_ThrowsException()
         {
             Assert.Throws<ArgumentNullException>(() => new EmailServerDriver(null));
@@ -120,7 +119,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
 
                 resultEmail.Should().BeEquivalentTo(email, ExcludeProperties);
 
-                resultEmail.Attachments[0].Id.Should().Be(email.Id);
                 resultEmail.Attachments[0].FileName.Should().Be(email.Attachments[0].FileName);
                 resultEmail.Attachments[0].ContentType.MediaType.Should().BeEquivalentTo(email.Attachments[0].ContentType);
             }
@@ -140,19 +138,19 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 var responseList = new List<EmailResponse> { email };
 
                 httpTest.RespondWithJson(responseList);
+                httpTest.RespondWith("This is the attachment");
+
                 var resultEmail = (await driver.FindAllEmailsAsync()).Single();
 
                 httpTest.ShouldHaveCalled("http://email.com/email")
                     .WithVerb(HttpMethod.Get);
-
-                httpTest.RespondWith("This is the attachment");
-
-                var data = await resultEmail.Attachments.First().DownloadDataAsync(settings);
-
+                
                 httpTest.ShouldHaveCalled("http://email.com/email/*/attachment/attachment1.txt")
                     .WithVerb(HttpMethod.Get);
 
-                Encoding.UTF8.GetString(data).Should().Be("This is the attachment");
+                var data = resultEmail.Attachments.First().AttachmentData;
+
+                Encoding.UTF8.GetString(data.ToArray()).Should().Be("This is the attachment");
             }
         }
 

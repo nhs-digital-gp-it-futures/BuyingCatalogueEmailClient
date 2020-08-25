@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Mime;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
@@ -14,11 +15,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         public List<byte> AttachmentData { get; } = new List<byte>();
 
         /// <summary>
-        /// The Id of the email associated with the attachment.
-        /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
         /// The file name of the attachment.
         /// </summary>
         public string FileName { get; set; }
@@ -31,12 +27,16 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Reads the content of an attachment and stores it as an encode string. Also stores the attachment filename. 
         /// </summary>
-        /// <param name="id">Id of the email the attachment comes from</param>
+        /// <param name="data">The attachment data downloaded as a byte array</param>
         /// <param name="fileName">The filename of the attachment.</param>
         /// <param name="mediaType">type of encoding used when storing the attachment.</param>
-        public EmailAttachmentData(string id, string fileName, ContentType mediaType)
+        public EmailAttachmentData(Byte[] data, string? fileName, ContentType mediaType)
         {
-            Id = id;
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            AttachmentData.AddRange(data);
             FileName = fileName;
             ContentType = mediaType;
         }

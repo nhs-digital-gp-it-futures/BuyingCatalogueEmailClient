@@ -8,11 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
-using Newtonsoft.Json.Linq;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist.ValueRetrievers;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Extensions;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 {
@@ -46,13 +43,37 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         }
 
         /// <summary>
-        /// Gets the binary data associated with the attachment
+        /// Gets the binary data associated with the attachment.
         /// </summary>
-        /// <param name="attachment">Attachment data <see cref="EmailAttachmentData"/></param>
-        /// <returns></returns>
-        public async Task<byte[]> DownloadAttachmentAsync(EmailAttachmentData attachment)
+        /// <param name="emailId">Id of the email containg the attachment.</param>
+        /// <param name="fileName">file name of the attachment.</param>
+        /// <returns>byte array of attachment data</returns>
+        public async Task<byte[]> DownloadAttachmentAsync(string? emailId,string? fileName)
         {
-            return await attachment.DownloadDataAsync(_emailServerDriverSettings);
+            if (emailId is null)
+            {
+                throw new ArgumentNullException(nameof(emailId));
+            }
+
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            var attachmentData = await _emailServerDriverSettings
+                .SmtpServerApiBaseUrl
+                .AbsoluteUri
+                .AppendPathSegment("email")
+                .AppendPathSegment(emailId)
+                .AppendPathSegment("attachment")
+                .AppendPathSegment(fileName)
+                .GetStreamAsync();
+
+            using (var memoryStream = new MemoryStream())
+            {
+                attachmentData.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
 
         /// <summary>
@@ -67,11 +88,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .AppendPathSegment("email")
                 .GetJsonAsync<EmailResponse[]>();
 
-            var emails =  responseBody.Select(ProcessEmailResponse).ToList();
+            var emails = new List<Email>();
+            foreach (var emailResponse in responseBody)
+            {
+                emails.Add(await ProcessEmailResponseAsync(emailResponse));
+            }
             return emails;
         }
 
-        private Email ProcessEmailResponse(EmailResponse response)
+        private async Task<Email> ProcessEmailResponseAsync(EmailResponse response)
         {
             if (response is null)
             {
@@ -86,7 +111,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 };
             email.From.AddRange(response.From.Where(x=> x!=null));
             email.To.AddRange(response.To.Where(x=> x!=null));
-            email.Attachments.AddRange(ExtractAttachmentsMetadata(response));
+            email.Attachments.AddRange( await ExtractAttachmentsMetadataAsync(response));
             return email;
         }
 
@@ -103,7 +128,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .DeleteAsync();
         }
 
-        private static List<EmailAttachmentData> ExtractAttachmentsMetadata(EmailResponse emailResponse)
+        private async Task<List<EmailAttachmentData>> ExtractAttachmentsMetadataAsync(EmailResponse emailResponse)
         {
             if (emailResponse is null)
             {
@@ -114,14 +139,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 
             if (emailResponse.Attachments != null)
             {
-                var emailId = emailResponse.Id ?? throw new NullReferenceException();
-                var attachments = emailResponse.Attachments;
-
-                foreach (var attachment in attachments)
+                foreach (var attachment in emailResponse.Attachments)
                 {
-                    string fileName = attachment.FileName ?? throw new NullReferenceException();
+                    string? fileName = attachment.FileName;
                     var contentType = attachment.ContentType;
-                    var result = new EmailAttachmentData(emailId, fileName, new ContentType(contentType));
+                    var data = await DownloadAttachmentAsync(emailResponse.Id, fileName);
+                    var result = new EmailAttachmentData(data, fileName, new ContentType(contentType));
                     attachmentResults.Add(result);
                 }
             }
