@@ -21,7 +21,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     /// that test e-mail functionality.
     /// </summary>
     [Binding]
-    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API")]
     public sealed class EmailServerDriver
     {
         private readonly EmailServerDriverSettings _emailServerDriverSettings;
@@ -81,8 +80,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 
             var email= new Email
                 {
-                    PlainTextBody = response.Text,
-                    HtmlBody = response.Html,
+                    Text = response.Text,
+                    Html = response.Html,
                     Subject = response.Subject
                 };
             email.From.AddRange(response.From.Where(x=> x!=null));

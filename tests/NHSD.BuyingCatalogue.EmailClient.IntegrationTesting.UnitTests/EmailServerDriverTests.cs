@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 using Flurl.Http.Testing;
 using Newtonsoft.Json;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders;
@@ -110,11 +111,14 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 httpTest.ShouldHaveCalled("http://email.com/email")
                     .WithVerb(HttpMethod.Get);
 
-                resultEmail.From.Should().BeEquivalentTo(email.From);
-                resultEmail.To.Should().BeEquivalentTo(email.To);
-                resultEmail.Subject.Should().Be(email.Subject);
-                resultEmail.PlainTextBody.Should().Be(email.Text);
-                resultEmail.HtmlBody.Should().Be(email.Html);
+                EquivalencyAssertionOptions<EmailResponse> ExcludeProperties(EquivalencyAssertionOptions<EmailResponse> options)
+                {
+                    options.Excluding(r => r.Id);
+                    options.Excluding(r => r.Attachments);
+                    return options;
+                }
+
+                resultEmail.Should().BeEquivalentTo(email, ExcludeProperties);
 
                 resultEmail.Attachments[0].Id.Should().Be(email.Id);
                 resultEmail.Attachments[0].FileName.Should().Be(email.Attachments[0].FileName);
@@ -172,7 +176,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 httpTest.ShouldHaveCalled("http://email.com/email")
                     .WithVerb(HttpMethod.Get);
 
-                resultEmail.HtmlBody.Should().Be(email.Html);
+                resultEmail.Html.Should().Be(email.Html);
             }
         }
     }
