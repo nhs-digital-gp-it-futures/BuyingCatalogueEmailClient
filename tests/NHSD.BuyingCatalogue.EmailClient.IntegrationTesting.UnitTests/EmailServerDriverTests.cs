@@ -114,7 +114,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 resultEmail.To.Should().BeEquivalentTo(email.To);
                 resultEmail.Subject.Should().Be(email.Subject);
                 resultEmail.PlainTextBody.Should().Be(email.Text);
-//                resultEmail.HtmlBody.Should().Be(email.Html);
+                resultEmail.HtmlBody.Should().Be(email.Html);
 
                 resultEmail.Attachments[0].Id.Should().Be(email.Id);
                 resultEmail.Attachments[0].FileName.Should().Be(email.Attachments[0].FileName);
