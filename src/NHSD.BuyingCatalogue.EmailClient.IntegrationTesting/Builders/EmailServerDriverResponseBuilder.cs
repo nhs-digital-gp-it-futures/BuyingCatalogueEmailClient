@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 {
     internal sealed class EmailServerDriverResponseBuilder
     {
-        private static int IdNumber = 0;
         private readonly List<EmailAddress> _to = new List<EmailAddress>();
         private readonly List<EmailAddress> _from = new List<EmailAddress>();
         private string _subject;
         private string? _html;
         private string _text;
-        private readonly List<EmailResponseAttachment> _attachmentContent =new List<EmailResponseAttachment>();
+        private readonly List<EmailResponseAttachment> _attachmentContent = new List<EmailResponseAttachment>();
 
         private EmailServerDriverResponseBuilder()
         {
@@ -28,30 +28,27 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             return new EmailServerDriverResponseBuilder();
         }
 
+        public EmailServerDriverResponseBuilder ClearTo()
+        {
+            _to.Clear();
+            return this;
+        }
+        
         public EmailServerDriverResponseBuilder WithTo(string address, string name="anonymous")
         {
-            if (address == null )
-            {
-                _to.Clear();
-            }
-            else
-            {
-                _to.Add(new EmailAddress(name, address));
-            }
+            _to.Add(new EmailAddress(name, address));
+            return this;
+        }
 
+        public EmailServerDriverResponseBuilder ClearFrom()
+        {
+            _from.Clear();
             return this;
         }
 
         public EmailServerDriverResponseBuilder WithFrom(string address, string name="anonymous")
         {
-            if (address == null)
-            {
-                _from.Clear();
-            }
-            else
-            {
-                _from.Add(new EmailAddress(name, address));
-            }
+            _from.Add(new EmailAddress(name, address));
             return this;
         }
 
@@ -73,16 +70,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             return this;
         }
 
+        public EmailServerDriverResponseBuilder ClearAttachments()
+        {
+            _attachmentContent.Clear();
+            return this;
+        }
+
         public EmailServerDriverResponseBuilder WithAttachmentContent(EmailResponseAttachment attachmentMetadata)
         {
-            if (attachmentMetadata is null)
-            {
-                _attachmentContent.Clear();
-            }
-            else
-            {
-                _attachmentContent.Add(attachmentMetadata);
-            }
+            _attachmentContent.Add(attachmentMetadata);
             return this;
         }
 
@@ -90,7 +86,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
         {
             var response= new EmailResponse
             {
-                Id = @"ID"+ (++IdNumber),
+                Id = Guid.NewGuid().ToString(),
                 Html = _html,
                 Subject = _subject,
                 Text = _text

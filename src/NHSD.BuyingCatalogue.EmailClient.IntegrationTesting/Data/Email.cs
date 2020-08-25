@@ -15,7 +15,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets or sets the to (recipient's) address.
         /// </summary>
-        public List<EmailAddress> To { get;} = new List<EmailAddress>();
+        public List<EmailAddress> To { get; } = new List<EmailAddress>();
 
         /// <summary>
         /// Gets or sets the subject of the e-mail.

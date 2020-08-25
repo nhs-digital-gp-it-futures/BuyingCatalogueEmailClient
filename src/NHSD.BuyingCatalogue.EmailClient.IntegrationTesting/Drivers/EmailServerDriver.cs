@@ -51,7 +51,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// </summary>
         /// <param name="attachment">Attachment data <see cref="EmailAttachmentData"/></param>
         /// <returns></returns>
-        public async Task<byte[]> DownloadAttachment(EmailAttachmentData attachment)
+        public async Task<byte[]> DownloadAttachmentAsync(EmailAttachmentData attachment)
         {
             return await attachment.DownloadDataAsync(_emailServerDriverSettings);
         }
@@ -68,7 +68,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .AppendPathSegment("email")
                 .GetJsonAsync<EmailResponse[]>();
 
-            var emails=  responseBody.Select(ProcessEmailResponse).ToList();
+            var emails =  responseBody.Select(ProcessEmailResponse).ToList();
             return emails;
         }
 

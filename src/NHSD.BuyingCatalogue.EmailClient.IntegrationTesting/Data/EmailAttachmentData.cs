@@ -12,14 +12,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// The content of the attachment encoded as a string.
         /// </summary>
         public List<byte> AttachmentData { get; } = new List<byte>();
+
         /// <summary>
         /// The Id of the email associated with the attachment.
         /// </summary>
         public string Id { get; set; }
+
         /// <summary>
         /// The file name of the attachment.
         /// </summary>
         public string FileName { get; set; }
+
         /// <summary>
         /// The content type associated with the attachment 
         /// </summary>
