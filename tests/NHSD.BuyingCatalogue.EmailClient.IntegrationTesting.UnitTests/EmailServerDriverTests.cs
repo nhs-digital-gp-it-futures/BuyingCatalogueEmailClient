@@ -23,7 +23,6 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
     internal static class EmailServerDriverTests
     {
         [Test]
-        //[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
         public static void Constructor_NullMessage_ThrowsException()
         {
             Assert.Throws<ArgumentNullException>(() => new EmailServerDriver(null));

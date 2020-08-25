@@ -17,7 +17,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
     {
         private const string FileName = "file.pdf";
         private static readonly ContentType _contentType = new ContentType(MediaTypeNames.Application.Json);
-        private static readonly byte[] dataArray =  {23,34,54};
+        private static readonly byte[] dataArray =  { 23, 34, 54 };
 
         [Test]
         public static void Constructor_InitializesFileName()
