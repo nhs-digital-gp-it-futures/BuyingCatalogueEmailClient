@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NHSD.BuyingCatalogue.EmailClient
+﻿namespace NHSD.BuyingCatalogue.EmailClient
 {
     /// <summary>
     /// Defines a template that can be used to initialize a new <see cref="EmailMessage"/>.
@@ -13,11 +11,6 @@ namespace NHSD.BuyingCatalogue.EmailClient
         public EmailAddress? Sender { get; set; }
 
         /// <summary>
-        /// Gets the recipients of the message.
-        /// </summary>
-        public IList<EmailAddress> Recipients { get; } = new List<EmailAddress>();
-
-        /// <summary>
         /// Gets or sets the subject of the message.
         /// </summary>
         public string? Subject { get; set; }
@@ -25,11 +18,11 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <summary>
         /// Gets or sets the HTML body.
         /// </summary>
-        public EmailMessageBody? HtmlBody { get; set; }
+        public string? HtmlContent { get; set; }
 
         /// <summary>
         /// Gets or sets the plain text body.
         /// </summary>
-        public EmailMessageBody? TextBody { get; set; }
+        public string? PlainTextContent { get; set; }
     }
 }

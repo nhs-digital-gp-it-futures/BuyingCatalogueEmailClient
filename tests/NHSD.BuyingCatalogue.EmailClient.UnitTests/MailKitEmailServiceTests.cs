@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Net.Security;
@@ -19,6 +20,14 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class MailKitEmailServiceTests
     {
+        private static EmailMessageTemplate BasicTemplate => new EmailMessageTemplate
+        {
+            Sender = new EmailAddress("from@sender.test"),
+            Subject = "subject",
+        };
+
+        private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress("to@recipient.test") };
+
         [Test]
         [SuppressMessage("Usage", "CA1806:Do not ignore method results", Justification = "Testing")]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Testing")]
@@ -93,13 +102,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 settings,
                 Mock.Of<ILogger<MailKitEmailService>>());
 
-            await service.SendEmailAsync(
-                new EmailMessage(
-                    new EmailAddress("from@sender.test"),
-                    new EmailAddress("to@recipient.test"))
-                {
-                    Subject = "subject",
-                });
+            await service.SendEmailAsync(new EmailMessage(BasicTemplate, SingleRecipient));
 
             mockTransport.Verify(
                 t => t.ConnectAsync(
@@ -122,12 +125,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                     It.IsAny<ITransferProgress>()))
                 .ThrowsAsync(new ServiceNotAuthenticatedException());
 
-            var message = new EmailMessage(
-                new EmailAddress("from@sender.test"),
-                new EmailAddress("to@recipient.test"))
-            {
-                Subject = "subject",
-            };
+            var message = new EmailMessage(BasicTemplate, SingleRecipient);
 
             var service = new MailKitEmailService(
                 mockTransport.Object,
@@ -154,12 +152,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                     It.IsAny<ITransferProgress>()))
                 .ThrowsAsync(new ServiceNotConnectedException());
 
-            var message = new EmailMessage(
-                new EmailAddress("from@sender.test"),
-                new EmailAddress("to@recipient.test"))
-            {
-                Subject = "subject",
-            };
+            var message = new EmailMessage(BasicTemplate, SingleRecipient);
 
             var service = new MailKitEmailService(
                 mockTransport.Object,
@@ -206,13 +199,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 settings,
                 Mock.Of<ILogger<MailKitEmailService>>());
 
-            await service.SendEmailAsync(
-                new EmailMessage(
-                    new EmailAddress("from@sender.test"),
-                    new EmailAddress("to@recipient.test"))
-                {
-                    Subject = "subject",
-                });
+            await service.SendEmailAsync(new EmailMessage(BasicTemplate, SingleRecipient));
 
             mockTransport.Verify(
                 t => t.AuthenticateAsync(
@@ -232,13 +219,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 settings,
                 Mock.Of<ILogger<MailKitEmailService>>());
 
-            await service.SendEmailAsync(
-                new EmailMessage(
-                    new EmailAddress("from@sender.test"),
-                    new EmailAddress("to@recipient.test"))
-                {
-                    Subject = "subject",
-                });
+            await service.SendEmailAsync(new EmailMessage(BasicTemplate, SingleRecipient));
 
             mockTransport.Verify(
                 t => t.AuthenticateAsync(
@@ -259,14 +240,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             var subject = Guid.NewGuid().ToString();
+            var template = BasicTemplate;
+            template.Subject = subject;
 
-            await service.SendEmailAsync(
-                new EmailMessage(
-                    new EmailAddress("from@sender.test"),
-                    new EmailAddress("to@recipient.test"))
-                {
-                    Subject = subject,
-                });
+            await service.SendEmailAsync(new EmailMessage(template, SingleRecipient));
 
             mockTransport.Verify(
                 t => t.SendAsync(
@@ -288,10 +265,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 settings,
                 Mock.Of<ILogger<MailKitEmailService>>());
 
-            await service.SendEmailAsync(
-                new EmailMessage(
-                    new EmailAddress("from@sender.test"),
-                    new EmailAddress("to@recipient.test")));
+            var template = BasicTemplate;
+            template.Subject = null;
+
+            await service.SendEmailAsync(new EmailMessage(template, SingleRecipient));
 
             mockTransport.Verify(
                 t => t.SendAsync(
@@ -313,13 +290,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 settings,
                 Mock.Of<ILogger<MailKitEmailService>>());
 
-            await service.SendEmailAsync(
-                new EmailMessage(
-                    new EmailAddress("from@sender.test"),
-                    new EmailAddress("to@recipient.test"))
-                {
-                    Subject = "subject",
-                });
+            await service.SendEmailAsync(new EmailMessage(BasicTemplate, SingleRecipient));
 
             mockTransport.Verify(
                 t => t.DisconnectAsync(
@@ -340,12 +311,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                     It.IsAny<ITransferProgress>()))
                 .ThrowsAsync(new SmtpFailedRecipientException(SmtpStatusCode.ServiceNotAvailable, "to@recipient.test"));
 
-            var message = new EmailMessage(
-                new EmailAddress("from@sender.test"),
-                new EmailAddress("to@recipient.test"))
-            {
-                Subject = "subject",
-            };
+            var message = new EmailMessage(BasicTemplate, SingleRecipient);
 
             var service = new MailKitEmailService(
                 mockTransport.Object,
