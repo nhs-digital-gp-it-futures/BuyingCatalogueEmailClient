@@ -20,17 +20,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets or sets the subject of the e-mail.
         /// </summary>
-        public string? Subject { get; set; }
+        public string? Subject { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the plain-text body of the e-mail.
         /// </summary>
-        public string? PlainTextBody { get; set; }
+        public string? PlainTextBody { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the HTML body of the e-mail.
         /// </summary>
-        public string? HtmlBody { get; set; }
+        public string? HtmlBody { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets Attachment

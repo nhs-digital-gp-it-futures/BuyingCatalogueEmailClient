@@ -9,7 +9,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
         private readonly List<EmailAddress> _to = new List<EmailAddress>();
         private readonly List<EmailAddress> _from = new List<EmailAddress>();
         private string _subject;
-        private string _html;
+        private string? _html;
         private string _text;
         private readonly List<EmailResponseAttachment> _attachmentContent =new List<EmailResponseAttachment>();
 
