@@ -48,7 +48,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <param name="emailId">Id of the email containg the attachment.</param>
         /// <param name="fileName">file name of the attachment.</param>
         /// <returns>byte array of attachment data</returns>
-        public async Task<byte[]> DownloadAttachmentAsync(string? emailId,string? fileName)
+        private async Task<byte[]> DownloadAttachmentAsync(string? emailId, string? fileName)
         {
             if (emailId is null)
             {
