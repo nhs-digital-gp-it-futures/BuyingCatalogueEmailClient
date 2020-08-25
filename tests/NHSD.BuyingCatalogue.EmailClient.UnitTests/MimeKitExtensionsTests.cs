@@ -12,7 +12,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class MimeKitExtensionsTests
     {
-        private static EmailMessageTemplate BasicTemplate => new EmailMessageTemplate { Sender = new EmailAddress("sender@somedomain.nhs.test") };
+        private static EmailMessageTemplate BasicTemplate => new EmailMessageTemplate(new EmailAddressTemplate("sender@somedomain.nhs.test"));
 
         private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress("recipient@somedomain.nhs.test") };
 
@@ -75,7 +75,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string sender = "sender@somedomain.test";
 
-            var template = new EmailMessageTemplate { Sender = new EmailAddress(sender) };
+            var template = new EmailMessageTemplate(new EmailAddressTemplate(sender));
             var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage();
@@ -169,7 +169,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_InitializesTextBody()
         {
-            const string expectedContent = "HTML";
+            const string expectedContent = "Text";
 
             var template = BasicTemplate;
             template.PlainTextContent = expectedContent;

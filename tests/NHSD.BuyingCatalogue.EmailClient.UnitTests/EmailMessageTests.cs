@@ -12,9 +12,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class EmailMessageTests
     {
-        private static EmailMessageTemplate EmptyTemplate => new EmailMessageTemplate { Sender = new EmailAddress() };
+        private static EmailMessageTemplate EmptyTemplate => new EmailMessageTemplate(new EmailAddressTemplate("from@sender.test"));
 
-        private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress() };
+        private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress("to@recipient.test") };
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
@@ -56,20 +56,20 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void Constructor_EmailMessageTemplate_InitializesSender()
         {
-            var sender = new EmailAddress();
-            var template = new EmailMessageTemplate { Sender = sender };
+            const string sender = "from@sender.test";
+            var template = new EmailMessageTemplate { Sender = new EmailAddressTemplate { Address = sender } };
 
             var message = new EmailMessage(template, SingleRecipient);
 
-            message.Sender.Should().BeSameAs(sender);
+            message.Sender.Address.Should().Be(sender);
         }
 
         [Test]
         [SuppressMessage("ReSharper", "CoVariantArrayConversion", Justification = "Type will match")]
         public static void Constructor_EmailMessageTemplate_InitializesRecipients()
         {
-            var recipient1 = new EmailAddress();
-            var recipient2 = new EmailAddress();
+            var recipient1 = new EmailAddress("to@recipient1.test");
+            var recipient2 = new EmailAddress("to@recipient2.test");
             var recipients = new[] { recipient1, recipient2 };
 
             var message = new EmailMessage(EmptyTemplate, recipients);

@@ -22,6 +22,11 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <param name="attachments">Any attachments to the e-mail.</param>
         /// <param name="formatItems">Any format items to format the content with.</param>
         /// <exception cref="ArgumentNullException"><paramref name="template"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentException"><see cref="EmailMessageTemplate.Sender"/> of <paramref name="template"/>
+        /// is <see langref="null"/> or does not have an address.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="recipients"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="recipients"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="formatItems"/> is <see langref="null"/>.</exception>
         public EmailMessage(
             EmailMessageTemplate template,
             ICollection<EmailAddress> recipients,
@@ -31,8 +36,8 @@ namespace NHSD.BuyingCatalogue.EmailClient
             if (template is null)
                 throw new ArgumentNullException(nameof(template));
 
-            Sender = template.Sender ?? throw new ArgumentException(
-                $"{nameof(EmailMessageTemplate.Sender)} must be provided.",
+            Sender = template.GetSenderAsEmailAddress() ?? throw new ArgumentException(
+                $"{nameof(EmailMessageTemplate.Sender)} of {nameof(template)} must have an address.",
                 nameof(template));
 
             if (recipients is null)

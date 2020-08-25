@@ -10,6 +10,22 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     internal static class EmailAddressTests
     {
         [Test]
+        [TestCase("")]
+        [TestCase("\t")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        public static void Constructor_String_EmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
+        {
+            Assert.Throws<ArgumentException>(() => new EmailAddress(address));
+        }
+
+        [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
+        public static void Constructor_String_NullAddress_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new EmailAddress(((string)null)!));
+        }
+
+        [Test]
         public static void Constructor_String_InitializesAddress()
         {
             const string address = "somebody@notarealaddress.test";
@@ -48,19 +64,43 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         }
 
         [Test]
-        [TestCase("")]
-        [TestCase("\t")]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Address_Set_EmptyOrWhiteSpaceAddress_ThrowsException(string address)
+        public static void Constructor_EmailAddressTemplate_NullTemplate_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentException>(() => new EmailAddress { Address = address });
+            Assert.Throws<ArgumentNullException>(() => new EmailAddress(null!));
         }
 
         [Test]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Address_Set_NullAddress_ThrowsException()
+        public static void Constructor_EmailAddressTemplate_NullAddress_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentNullException>(() => new EmailAddress { Address = null });
+            Assert.Throws<ArgumentException>(() => new EmailAddress(new EmailAddressTemplate()));
+        }
+
+        [Test]
+        public static void Constructor_EmailAddressTemplate_InitializesAddress()
+        {
+            const string expectedAddress = "bob@marley.test";
+
+            var emailAddress = new EmailAddress(new EmailAddressTemplate { Address = expectedAddress });
+
+            emailAddress.Address.Should().Be(expectedAddress);
+        }
+
+        [Test]
+        public static void Constructor_EmailAddressTemplate_InitializesDisplayName()
+        {
+            const string expectedDisplayName = "Bob Marley ";
+
+            var template = new EmailAddressTemplate
+            {
+                Address = "bob@marley.test",
+                DisplayName = expectedDisplayName,
+            };
+
+            var emailAddress = new EmailAddress(template);
+
+            emailAddress.DisplayName.Should().Be(expectedDisplayName);
         }
     }
 }
