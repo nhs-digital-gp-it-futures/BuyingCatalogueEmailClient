@@ -6,19 +6,18 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
 {
     internal sealed class EmailServerDriverResponseBuilder
     {
+        private const string Text = "Dear Sir or Madam";
         private readonly List<EmailAddress> _to = new List<EmailAddress>();
         private readonly List<EmailAddress> _from = new List<EmailAddress>();
         private readonly List<EmailResponseAttachment> _attachmentContent = new List<EmailResponseAttachment>();
         private string _subject;
         private string _html;
-        private string _text;
 
         private EmailServerDriverResponseBuilder()
         {
-            _to.Add(new EmailAddress("recpient", "recpient@email.com"));
+            _to.Add(new EmailAddress("recipient", "recpient@email.com"));
             _from.Add(new EmailAddress("sender", "sender@email.com"));
             _subject = "important email.";
-            _text = "Dear Sir or Madam";
             _html = "<p/>";
             _attachmentContent.Add(EmailResponseAttachmentBuilder.Create().Build());
         }
@@ -28,57 +27,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
             return new EmailServerDriverResponseBuilder();
         }
 
-        public EmailServerDriverResponseBuilder ClearTo()
-        {
-            _to.Clear();
-            return this;
-        }
-
-        public EmailServerDriverResponseBuilder WithTo(string address, string name = "anonymous")
-        {
-            _to.Add(new EmailAddress(name, address));
-            return this;
-        }
-
-        public EmailServerDriverResponseBuilder ClearFrom()
-        {
-            _from.Clear();
-            return this;
-        }
-
-        public EmailServerDriverResponseBuilder WithFrom(string address, string name = "anonymous")
-        {
-            _from.Add(new EmailAddress(name, address));
-            return this;
-        }
-
         public EmailServerDriverResponseBuilder WithSubject(string subject)
         {
             _subject = subject;
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithText(string text)
-        {
-            _text = text;
-            return this;
-        }
-
         public EmailServerDriverResponseBuilder WithHtml(string html)
         {
             _html = html;
-            return this;
-        }
-
-        public EmailServerDriverResponseBuilder ClearAttachments()
-        {
-            _attachmentContent.Clear();
-            return this;
-        }
-
-        public EmailServerDriverResponseBuilder WithAttachmentContent(EmailResponseAttachment attachmentMetadata)
-        {
-            _attachmentContent.Add(attachmentMetadata);
             return this;
         }
 
@@ -89,7 +46,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
                 Id = Guid.NewGuid().ToString(),
                 Html = _html,
                 Subject = _subject,
-                Text = _text,
+                Text = Text,
             };
 
             response.To.AddRange(_to);
