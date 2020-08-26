@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
@@ -10,6 +7,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     /// </summary>
     public sealed class EmailAddress
     {
+        /// <summary>
+        /// Creates a EmailAddress containing the Name and address to send to
+        /// </summary>
+        /// <param name="name">Name for example James Dean</param>
+        /// <param name="address">JamesD@email.com</param>
+        public EmailAddress(string name, string address)
+        {
+            Name = name;
+            Address = address;
+        }
+
         /// <summary>
         /// The Address.
         /// </summary>
@@ -21,16 +29,5 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// </summary>
         [JsonProperty("name")]
         public string? Name { get; set; }
-
-        /// <summary>
-        /// Creates a EmailAddress containing the Name and address to send to
-        /// </summary>
-        /// <param name="name">Name for example James Dean</param>
-        /// <param name="address">JamesD@email.com</param>
-        public EmailAddress(string name, string address)
-        {
-            Name = name;
-            Address = address;
-        }
     }
 }

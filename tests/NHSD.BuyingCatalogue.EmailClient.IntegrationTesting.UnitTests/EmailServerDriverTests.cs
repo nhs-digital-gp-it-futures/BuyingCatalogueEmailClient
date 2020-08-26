@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Mime;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Flurl.Http.Testing;
-using Newtonsoft.Json;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers;
@@ -23,9 +20,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
     internal static class EmailServerDriverTests
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
         public static void Constructor_NullMessage_ThrowsException()
         {
-            Assert.Throws<ArgumentNullException>(() => new EmailServerDriver(null));
+            Assert.Throws<ArgumentNullException>(() => new EmailServerDriver(null!));
         }
 
         [Test]
@@ -33,14 +31,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         {
             var settings = new EmailServerDriverSettings(new Uri("http://bjss.com/"));
             var driver = new EmailServerDriver(settings);
-            using (var httpTest = new HttpTest())
-            {
-                var values = new {};
-                httpTest.RespondWithJson(values);
-                await driver.ClearAllEmailsAsync();
-                httpTest.ShouldHaveCalled("http://bjss.com/email/all")
-                    .WithVerb(HttpMethod.Delete);
-            }
+
+            using var httpTest = new HttpTest();
+            httpTest.RespondWithJson(new { });
+
+            await driver.ClearAllEmailsAsync();
+
+            httpTest.ShouldHaveCalled("http://bjss.com/email/all").WithVerb(HttpMethod.Delete);
         }
 
         [Test]
@@ -48,19 +45,19 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         {
             var settings = new EmailServerDriverSettings(new Uri("http://bjss.com/"));
             var driver = new EmailServerDriver(settings);
-            using (var httpTest = new HttpTest())
+            var responseList = new List<EmailResponse>
             {
-                var responseList = new List<EmailResponse>()
-                {
-                    EmailServerDriverResponseBuilder.Create().Build(),
-                    EmailServerDriverResponseBuilder.Create().Build()
-                };
-                httpTest.RespondWithJson(responseList);
-                var resultCount =await driver.GetEmailCountAsync();
-                resultCount.Should().Be(2);
-                httpTest.ShouldHaveCalled("http://bjss.com/email")
-                    .WithVerb(HttpMethod.Get);
-            }
+                EmailServerDriverResponseBuilder.Create().Build(),
+                EmailServerDriverResponseBuilder.Create().Build(),
+            };
+
+            using var httpTest = new HttpTest();
+            httpTest.RespondWithJson(responseList);
+
+            var resultCount = await driver.GetEmailCountAsync();
+
+            resultCount.Should().Be(2);
+            httpTest.ShouldHaveCalled("http://bjss.com/email").WithVerb(HttpMethod.Get);
         }
 
         [Test]
@@ -68,26 +65,25 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         {
             var settings = new EmailServerDriverSettings(new Uri("http://email.com/"));
             var driver = new EmailServerDriver(settings);
-            using (var httpTest = new HttpTest())
-            {
-                var email = EmailServerDriverResponseBuilder.Create()
-                    .WithSubject("Subject1")
-                    .Build();
 
-                var secondEmail = EmailServerDriverResponseBuilder.Create()
-                    .WithSubject("Subject2")
-                    .Build();
+            var email = EmailServerDriverResponseBuilder.Create()
+                .WithSubject("Subject1")
+                .Build();
 
-                var responseList = new List<EmailResponse> {email, secondEmail };
+            var secondEmail = EmailServerDriverResponseBuilder.Create()
+                .WithSubject("Subject2")
+                .Build();
 
-                httpTest.RespondWithJson(responseList);
-                var resultEmails = await driver.FindAllEmailsAsync();
-                
-                httpTest.ShouldHaveCalled("http://email.com/email")
-                    .WithVerb(HttpMethod.Get);
-                resultEmails.Should().ContainSingle(e => e.Subject == email.Subject);
-                resultEmails.Should().ContainSingle(e => e.Subject == secondEmail.Subject);
-            }
+            var responseList = new List<EmailResponse> { email, secondEmail };
+
+            using var httpTest = new HttpTest();
+            httpTest.RespondWithJson(responseList);
+
+            var resultEmails = await driver.FindAllEmailsAsync();
+
+            httpTest.ShouldHaveCalled("http://email.com/email").WithVerb(HttpMethod.Get);
+            resultEmails.Should().ContainSingle(e => e.Subject == email.Subject);
+            resultEmails.Should().ContainSingle(e => e.Subject == secondEmail.Subject);
         }
 
         [Test]
@@ -95,32 +91,30 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         {
             var settings = new EmailServerDriverSettings(new Uri("http://email.com/"));
             var driver = new EmailServerDriver(settings);
-            using (var httpTest = new HttpTest())
+            var email = EmailServerDriverResponseBuilder.Create()
+                .WithSubject("Subject1")
+                .Build();
+
+            var responseList = new List<EmailResponse> { email };
+
+            using var httpTest = new HttpTest();
+            httpTest.RespondWithJson(responseList);
+
+            var resultEmail = (await driver.FindAllEmailsAsync()).Single();
+
+            static EquivalencyAssertionOptions<EmailResponse> ExcludeProperties(EquivalencyAssertionOptions<EmailResponse> options)
             {
-                var email = EmailServerDriverResponseBuilder.Create()
-                    .WithSubject("Subject1")
-                    .Build();
-
-                var responseList = new List<EmailResponse> { email};
-
-                httpTest.RespondWithJson(responseList);
-                var resultEmail = (await driver.FindAllEmailsAsync()).Single();
-
-                httpTest.ShouldHaveCalled("http://email.com/email")
-                    .WithVerb(HttpMethod.Get);
-
-                EquivalencyAssertionOptions<EmailResponse> ExcludeProperties(EquivalencyAssertionOptions<EmailResponse> options)
-                {
-                    options.Excluding(r => r.Id);
-                    options.Excluding(r => r.Attachments);
-                    return options;
-                }
-
-                resultEmail.Should().BeEquivalentTo(email, ExcludeProperties);
-
-                resultEmail.Attachments[0].FileName.Should().Be(email.Attachments[0].FileName);
-                resultEmail.Attachments[0].ContentType.MediaType.Should().BeEquivalentTo(email.Attachments[0].ContentType);
+                options.Excluding(r => r.Id);
+                options.Excluding(r => r.Attachments);
+                return options;
             }
+
+            httpTest.ShouldHaveCalled("http://email.com/email").WithVerb(HttpMethod.Get);
+
+            resultEmail.Should().BeEquivalentTo(email, ExcludeProperties);
+
+            resultEmail.Attachments[0].FileName.Should().Be(email.Attachments[0].FileName);
+            resultEmail.Attachments[0].ContentType.MediaType.Should().BeEquivalentTo(email.Attachments[0].ContentType);
         }
 
         [Test]
@@ -128,29 +122,30 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         {
             var settings = new EmailServerDriverSettings(new Uri("http://email.com/"));
             var driver = new EmailServerDriver(settings);
-            using (var httpTest = new HttpTest())
-            {
-                var email = EmailServerDriverResponseBuilder.Create()
-                    .WithSubject("Subject1")
-                    .Build();
+            var email = EmailServerDriverResponseBuilder.Create()
+                .WithSubject("Subject1")
+                .Build();
 
-                var responseList = new List<EmailResponse> { email };
+            var responseList = new List<EmailResponse> { email };
 
-                httpTest.RespondWithJson(responseList);
-                httpTest.RespondWith("This is the attachment");
+            using var httpTest = new HttpTest();
+            httpTest.RespondWithJson(responseList);
+            httpTest.RespondWith("This is the attachment");
 
-                var resultEmail = (await driver.FindAllEmailsAsync()).Single();
+            var resultEmail = (await driver.FindAllEmailsAsync()).Single();
 
-                httpTest.ShouldHaveCalled("http://email.com/email")
-                    .WithVerb(HttpMethod.Get);
-                
-                httpTest.ShouldHaveCalled("http://email.com/email/*/attachment/attachment1.txt")
-                    .WithVerb(HttpMethod.Get);
+            httpTest
+                .ShouldHaveCalled("http://email.com/email")
+                .WithVerb(HttpMethod.Get);
 
-                var data = resultEmail.Attachments.First().AttachmentData;
+            httpTest
+                .ShouldHaveCalled("http://email.com/email/*/attachment/attachment1.txt")
+                .WithVerb(HttpMethod.Get);
 
-                Encoding.UTF8.GetString(data.ToArray()).Should().Be("This is the attachment");
-            }
+            var attachmentData = resultEmail.Attachments.First().AttachmentData;
+            var attachmentContent = Encoding.UTF8.GetString(attachmentData.ToArray());
+
+            attachmentContent.Should().Be("This is the attachment");
         }
 
         [Test]
@@ -158,23 +153,20 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         {
             var settings = new EmailServerDriverSettings(new Uri("http://email.com/"));
             var driver = new EmailServerDriver(settings);
-            using (var httpTest = new HttpTest())
-            {
-                var email = EmailServerDriverResponseBuilder.Create()
-                    .WithSubject("Subject1")
-                    .WithHtml(null)
-                    .Build();
+            var email = EmailServerDriverResponseBuilder.Create()
+                .WithSubject("Subject1")
+                .WithHtml(null)
+                .Build();
 
-                var responseList = new List<EmailResponse> { email };
+            var responseList = new List<EmailResponse> { email };
 
-                httpTest.RespondWithJson(responseList);
-                var resultEmail = (await driver.FindAllEmailsAsync()).Single();
+            using var httpTest = new HttpTest();
+            httpTest.RespondWithJson(responseList);
 
-                httpTest.ShouldHaveCalled("http://email.com/email")
-                    .WithVerb(HttpMethod.Get);
+            var resultEmail = (await driver.FindAllEmailsAsync()).Single();
 
-                resultEmail.Html.Should().Be(email.Html);
-            }
+            httpTest.ShouldHaveCalled("http://email.com/email").WithVerb(HttpMethod.Get);
+            resultEmail.Html.Should().Be(email.Html);
         }
     }
 }

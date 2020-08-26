@@ -8,15 +8,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
     {
         private readonly List<EmailAddress> _to = new List<EmailAddress>();
         private readonly List<EmailAddress> _from = new List<EmailAddress>();
+        private readonly List<EmailResponseAttachment> _attachmentContent = new List<EmailResponseAttachment>();
         private string _subject;
         private string? _html;
         private string _text;
-        private readonly List<EmailResponseAttachment> _attachmentContent = new List<EmailResponseAttachment>();
 
         private EmailServerDriverResponseBuilder()
         {
-            _to.Add(new EmailAddress("recpient","recpient@email.com"));
-            _from.Add(new EmailAddress("sender","sender@email.com"));
+            _to.Add(new EmailAddress("recpient", "recpient@email.com"));
+            _from.Add(new EmailAddress("sender", "sender@email.com"));
             _subject = "important email.";
             _text = "Dear Sir or Madam";
             _html = "<p/>";
@@ -33,8 +33,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             _to.Clear();
             return this;
         }
-        
-        public EmailServerDriverResponseBuilder WithTo(string address, string name="anonymous")
+
+        public EmailServerDriverResponseBuilder WithTo(string address, string name = "anonymous")
         {
             _to.Add(new EmailAddress(name, address));
             return this;
@@ -46,7 +46,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithFrom(string address, string name="anonymous")
+        public EmailServerDriverResponseBuilder WithFrom(string address, string name = "anonymous")
         {
             _from.Add(new EmailAddress(name, address));
             return this;
@@ -64,7 +64,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithHtml(string html)
+        public EmailServerDriverResponseBuilder WithHtml(string? html)
         {
             _html = html;
             return this;
@@ -84,12 +84,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 
         public EmailResponse Build()
         {
-            var response= new EmailResponse
+            var response = new EmailResponse
             {
                 Id = Guid.NewGuid().ToString(),
                 Html = _html,
                 Subject = _subject,
-                Text = _text
+                Text = _text,
             };
 
             response.To.AddRange(_to);

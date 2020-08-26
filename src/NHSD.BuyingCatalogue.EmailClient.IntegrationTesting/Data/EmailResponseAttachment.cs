@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
@@ -10,6 +7,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     /// </summary>
     public sealed class EmailResponseAttachment
     {
+        /// <summary>
+        /// Represents metadata found in the Attachment section of a MailDev Email api response.
+        /// </summary>
+        /// <param name="contentType">The content type of the attachment.</param>
+        /// <param name="fileName">the file name of the attachment</param>
+        public EmailResponseAttachment(string contentType, string fileName)
+        {
+            FileName = fileName;
+            ContentType = contentType;
+        }
+
         /// <summary>
         /// The Content Type associated with the attachment.
         /// </summary>
@@ -21,16 +29,5 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// </summary>
         [JsonProperty("fileName")]
         public string? FileName { get; set; }
-
-        /// <summary>
-        /// Represents metadata found in the Attachment section of a MailDev Email api response.
-        /// </summary>
-        /// <param name="contentType">The content type of the attachment.</param>
-        /// <param name="fileName">the file name of the attachment</param>
-        public EmailResponseAttachment(string contentType, string fileName)
-        {
-            FileName = fileName;
-            ContentType = contentType;
-        }
     }
 }

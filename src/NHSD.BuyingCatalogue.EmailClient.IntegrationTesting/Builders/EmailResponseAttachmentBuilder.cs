@@ -5,14 +5,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders
 {
     internal sealed class EmailResponseAttachmentBuilder
     {
-        public string ContentType { get; set; }
-        public string FileName { get; set; }
-
         private EmailResponseAttachmentBuilder()
         {
             ContentType = MediaTypeNames.Application.Json;
             FileName = "attachment1.txt";
         }
+
+        public string ContentType { get; set; }
+
+        public string FileName { get; set; }
 
         public static EmailResponseAttachmentBuilder Create()
         {

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -43,6 +41,40 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         }
 
         /// <summary>
+        /// FindAllEmailsAsync gets email objects from the SMTP service.
+        /// </summary>
+        /// <returns>a list containing all e-mails in the mailbox.</returns>
+        public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
+        {
+            var responseBody = await _emailServerDriverSettings
+                .SmtpServerApiBaseUrl
+                .AbsoluteUri
+                .AppendPathSegment("email")
+                .GetJsonAsync<EmailResponse[]>();
+
+            var emails = new List<Email>();
+            foreach (var emailResponse in responseBody)
+            {
+                emails.Add(await ProcessEmailResponseAsync(emailResponse));
+            }
+
+            return emails;
+        }
+
+        /// <summary>
+        /// Deletes all e-mails from the mailbox.
+        /// </summary>
+        /// <returns>An asynchronous <see cref="Task" /> context.</returns>
+        public async Task ClearAllEmailsAsync()
+        {
+            await _emailServerDriverSettings
+                .SmtpServerApiBaseUrl
+                .AbsoluteUri
+                .AppendPathSegments("email", "all")
+                .DeleteAsync();
+        }
+
+        /// <summary>
         /// Gets the binary data associated with the attachment.
         /// </summary>
         /// <param name="emailId">Id of the email containg the attachment.</param>
@@ -69,31 +101,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .AppendPathSegment(fileName)
                 .GetStreamAsync();
 
-            using (var memoryStream = new MemoryStream())
-            {
-                attachmentData.CopyTo(memoryStream);
-                return memoryStream.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// FindAllEmailsAsync gets email objects from the SMTP service.
-        /// </summary>
-        /// <returns>a list containing all e-mails in the mailbox.</returns>
-        public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
-        {
-            var responseBody = await _emailServerDriverSettings
-                .SmtpServerApiBaseUrl
-                .AbsoluteUri
-                .AppendPathSegment("email")
-                .GetJsonAsync<EmailResponse[]>();
-
-            var emails = new List<Email>();
-            foreach (var emailResponse in responseBody)
-            {
-                emails.Add(await ProcessEmailResponseAsync(emailResponse));
-            }
-            return emails;
+            await using var memoryStream = new MemoryStream();
+            await attachmentData.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
         }
 
         private async Task<Email> ProcessEmailResponseAsync(EmailResponse response)
@@ -103,29 +113,16 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 throw new ArgumentNullException(nameof(response));
             }
 
-            var email= new Email
-                {
-                    Text = response.Text,
-                    Html = response.Html,
-                    Subject = response.Subject
-                };
-            email.From.AddRange(response.From.Where(x=> x!=null));
-            email.To.AddRange(response.To.Where(x=> x!=null));
-            email.Attachments.AddRange( await ExtractAttachmentsMetadataAsync(response));
+            var email = new Email
+            {
+                Text = response.Text,
+                Html = response.Html,
+                Subject = response.Subject,
+            };
+            email.From.AddRange(response.From.Where(x => x != null));
+            email.To.AddRange(response.To.Where(x => x != null));
+            email.Attachments.AddRange(await ExtractAttachmentsMetadataAsync(response));
             return email;
-        }
-
-        /// <summary>
-        /// Deletes all e-mails from the mailbox.
-        /// </summary>
-        /// <returns>An asynchronous <see cref="Task" /> context.</returns>
-        public async Task ClearAllEmailsAsync()
-        {
-            await _emailServerDriverSettings
-                .SmtpServerApiBaseUrl
-                .AbsoluteUri
-                .AppendPathSegments("email", "all")
-                .DeleteAsync();
         }
 
         private async Task<List<EmailAttachmentData>> ExtractAttachmentsMetadataAsync(EmailResponse emailResponse)
@@ -137,17 +134,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 
             var attachmentResults = new List<EmailAttachmentData>();
 
-            if (emailResponse.Attachments != null)
+            foreach (var attachment in emailResponse.Attachments)
             {
-                foreach (var attachment in emailResponse.Attachments)
-                {
-                    string? fileName = attachment.FileName;
-                    var contentType = attachment.ContentType;
-                    var data = await DownloadAttachmentAsync(emailResponse.Id, fileName);
-                    var result = new EmailAttachmentData(data, fileName, new ContentType(contentType));
-                    attachmentResults.Add(result);
-                }
+                string? fileName = attachment.FileName;
+                var contentType = attachment.ContentType;
+                var data = await DownloadAttachmentAsync(emailResponse.Id, fileName);
+                var result = new EmailAttachmentData(data, fileName, new ContentType(contentType));
+                attachmentResults.Add(result);
             }
+
             return attachmentResults;
         }
     }

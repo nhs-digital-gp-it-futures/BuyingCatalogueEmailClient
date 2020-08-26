@@ -10,6 +10,24 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     public sealed class EmailAttachmentData
     {
         /// <summary>
+        /// Reads the content of an attachment and stores it as an encode string. Also stores the attachment filename.
+        /// </summary>
+        /// <param name="data">The attachment data downloaded as a byte array</param>
+        /// <param name="fileName">The filename of the attachment.</param>
+        /// <param name="mediaType">type of encoding used when storing the attachment.</param>
+        public EmailAttachmentData(IEnumerable<byte> data, string? fileName, ContentType mediaType)
+        {
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            AttachmentData.AddRange(data);
+            FileName = fileName;
+            ContentType = mediaType;
+        }
+
+        /// <summary>
         /// The content of the attachment in a list of bytes.
         /// </summary>
         public List<byte> AttachmentData { get; } = new List<byte>();
@@ -20,25 +38,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         public string FileName { get; set; }
 
         /// <summary>
-        /// The content type associated with the attachment 
+        /// The content type associated with the attachment
         /// </summary>
         public ContentType ContentType { get; set; }
-
-        /// <summary>
-        /// Reads the content of an attachment and stores it as an encode string. Also stores the attachment filename. 
-        /// </summary>
-        /// <param name="data">The attachment data downloaded as a byte array</param>
-        /// <param name="fileName">The filename of the attachment.</param>
-        /// <param name="mediaType">type of encoding used when storing the attachment.</param>
-        public EmailAttachmentData(Byte[] data, string? fileName, ContentType mediaType)
-        {
-            if (fileName is null)
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-            AttachmentData.AddRange(data);
-            FileName = fileName;
-            ContentType = mediaType;
-        }
     }
 }
