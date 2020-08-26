@@ -40,7 +40,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
             get => _address;
             set
             {
-                if (value == null)
+                if (value is null)
                     throw new ArgumentNullException(nameof(value));
 
                 if (string.IsNullOrWhiteSpace(value))
