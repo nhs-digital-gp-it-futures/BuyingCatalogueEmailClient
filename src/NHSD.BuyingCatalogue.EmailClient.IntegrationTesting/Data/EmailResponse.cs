@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
     /// <summary>
-    /// Represents the EmailResponse from calls to MailDev API
+    /// Represents the response from calls to the MailDev API.
     /// </summary>
     public sealed class EmailResponse
     {
         /// <summary>
-        /// Gets or sets the email Id of the message
+        /// Gets or sets the ID of the message.
         /// </summary>
         [JsonProperty("id")]
         public string? Id { get; set; }
@@ -29,25 +27,25 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         public string? Html { get; set; }
 
         /// <summary>
-        /// Gets or sets the Subject of the email
+        /// Gets or sets the subject of the email.
         /// </summary>
         [JsonProperty("subject")]
         public string? Subject { get; set; }
 
         /// <summary>
-        /// Gets or sets the From addresses of the email
+        /// Gets the list of From addresses of the email.
         /// </summary>
         [JsonProperty("from")]
         public List<EmailAddress> From { get; } = new List<EmailAddress>();
 
         /// <summary>
-        /// Gets or sets the To addresses of the email
+        /// Gets the list of To addresses of the email.
         /// </summary>
         [JsonProperty("to")]
         public List<EmailAddress> To { get; } = new List<EmailAddress>();
 
         /// <summary>
-        /// Gets or sets the attachment meta data found on the email
+        /// Gets a list of the attachment metadata.
         /// </summary>
         [JsonProperty("attachments")]
         public List<EmailResponseAttachment> Attachments { get; } = new List<EmailResponseAttachment>();

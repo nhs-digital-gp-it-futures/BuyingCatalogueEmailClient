@@ -45,7 +45,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// provided <see cref="IMailTransport" /> instance.
         /// </summary>
         /// <param name="emailMessage">The e-mail message to send asynchronously.</param>
-        /// <returns>An asynchronous task context.</returns>
+        /// <returns>An asynchronous <see cref="Task"/> context.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="emailMessage" /> is <see langref="null" />.</exception>
         public async Task SendEmailAsync(EmailMessage emailMessage)
         {

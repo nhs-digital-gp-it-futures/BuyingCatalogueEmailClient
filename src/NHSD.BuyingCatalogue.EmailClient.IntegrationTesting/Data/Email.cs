@@ -8,12 +8,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     public sealed class Email
     {
         /// <summary>
-        /// Gets or sets the from (sender's) address.
+        /// Gets the list of senders' addresses.
         /// </summary>
         public List<EmailAddress> From { get; } = new List<EmailAddress>();
 
         /// <summary>
-        /// Gets or sets the to (recipient's) address.
+        /// Gets the list of To (recipient's) address.
         /// </summary>
         public List<EmailAddress> To { get; } = new List<EmailAddress>();
 
@@ -33,7 +33,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         public string? Html { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets Attachment
+        /// Gets the list of attachments.
         /// </summary>
         public List<EmailAttachmentData> Attachments { get; } = new List<EmailAttachmentData>();
     }

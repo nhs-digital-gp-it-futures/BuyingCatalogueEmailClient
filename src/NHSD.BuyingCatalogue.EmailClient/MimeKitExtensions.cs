@@ -39,7 +39,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
                 Subject = $"{emailSubjectPrefix} {emailMessage.Subject}".Trim(),
             };
 
-            message.From.Add(emailMessage.Sender?.AsMailboxAddress());
+            message.From.Add(emailMessage.Sender.AsMailboxAddress());
 
             foreach (var recipient in emailMessage.Recipients)
             {

@@ -12,6 +12,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class MimeKitExtensionsTests
     {
+        private static EmailMessageTemplate BasicTemplate => new EmailMessageTemplate(new EmailAddressTemplate("sender@somedomain.nhs.test"));
+
+        private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress("recipient@somedomain.nhs.test") };
+
         [Test]
         public static void AsMailboxAddress_ReturnsExpectedType()
         {
@@ -49,9 +53,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_NullSubject_SetsSubjectToEmptyString()
         {
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"));
+            var emailMessage = new EmailMessage(BasicTemplate, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage(string.Empty);
 
@@ -61,9 +63,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_ReturnsExpectedType()
         {
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"));
+            var emailMessage = new EmailMessage(BasicTemplate, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -75,9 +75,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string sender = "sender@somedomain.test";
 
-            var emailMessage = new EmailMessage(
-                new EmailAddress(sender),
-                new EmailAddress("recipient@somedomain.test"));
+            var template = new EmailMessageTemplate(new EmailAddressTemplate(sender));
+            var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -94,7 +93,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var recipients = new[] { new EmailAddress(recipient1), new EmailAddress(recipient2) };
 
-            var emailMessage = new EmailMessage(new EmailAddress("sender@somedomain.nhs.test"), recipients);
+            var emailMessage = new EmailMessage(BasicTemplate, recipients);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -109,12 +108,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Subject";
 
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"))
-            {
-                Subject = subject,
-            };
+            var template = BasicTemplate;
+            template.Subject = subject;
+
+            var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -128,12 +125,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Subject";
 
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"))
-            {
-                Subject = subject,
-            };
+            var template = BasicTemplate;
+            template.Subject = subject;
+
+            var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage(emailSubjectPrefix);
 
@@ -146,12 +141,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             const string emailSubjectPrefix = "Prefix";
             const string subject = "Subject";
 
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"))
-            {
-                Subject = subject,
-            };
+            var template = BasicTemplate;
+            template.Subject = subject;
+
+            var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage(emailSubjectPrefix);
 
@@ -163,12 +156,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string expectedContent = "HTML";
 
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"))
-            {
-                HtmlBody = new EmailMessageBody(expectedContent),
-            };
+            var template = BasicTemplate;
+            template.HtmlContent = expectedContent;
+
+            var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -180,12 +171,10 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string expectedContent = "Text";
 
-            var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.nhs.test"))
-            {
-                TextBody = new EmailMessageBody(expectedContent),
-            };
+            var template = BasicTemplate;
+            template.PlainTextContent = expectedContent;
+
+            var emailMessage = new EmailMessage(template, SingleRecipient);
 
             var mimeMessage = emailMessage.AsMimeMessage();
 
@@ -195,27 +184,32 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void AsMimeMessage_WithAttachment_HasExpectedAttachment()
         {
-            const string fileName = "test.csv";
-            const string content = "Hello World";
-            using var contentStream = new MemoryStream(Encoding.ASCII.GetBytes(content));
+            var fileNames = new[] { "hello.csv", "world.txt" };
+            var content = new[] { "Hello", "World" };
+            var mimeTypes = new[] { "text/csv", "text/plain" };
+
+            using var contentStream1 = new MemoryStream(Encoding.ASCII.GetBytes(content[0]));
+            using var contentStream2 = new MemoryStream(Encoding.ASCII.GetBytes(content[1]));
 
             var emailMessage = new EmailMessage(
-                new EmailAddress("sender@somedomain.nhs.test"),
-                new EmailAddress("recipient@somedomain.test"));
-
-            emailMessage.Attachments.Add(new EmailAttachment(fileName, contentStream));
+                BasicTemplate,
+                SingleRecipient,
+                new[] { new EmailAttachment(fileNames[0], contentStream1), new EmailAttachment(fileNames[1], contentStream2) });
 
             var mimeMessage = emailMessage.AsMimeMessage();
             var attachments = mimeMessage.Attachments.ToList();
 
-            attachments.Should().HaveCount(1);
+            attachments.Should().HaveCount(2);
 
-            var attachment = (TextPart)attachments.First();
+            for (var i = 0; i < fileNames.Length; i++)
+            {
+                var attachment = (TextPart)attachments[i];
 
-            attachment.Should().NotBeNull();
-            attachment.ContentType.MimeType.Should().Be("text/csv");
-            attachment.FileName.Should().Be(fileName);
-            attachment.Text.Should().Be(content);
+                attachment.Should().NotBeNull();
+                attachment.ContentType.MimeType.Should().Be(mimeTypes[i]);
+                attachment.FileName.Should().Be(fileNames[i]);
+                attachment.Text.Should().Be(content[i]);
+            }
         }
     }
 }

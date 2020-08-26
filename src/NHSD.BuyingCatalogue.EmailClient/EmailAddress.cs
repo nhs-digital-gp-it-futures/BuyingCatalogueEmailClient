@@ -7,53 +7,55 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class EmailAddress
     {
-        private string? _address;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EmailAddress"/> class.
-        /// </summary>
-        /// <remarks>Required by <see cref="System.Text.Json"/>.</remarks>
-        public EmailAddress()
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailAddress"/> class
         /// with the given display name and address.
         /// </summary>
         /// <param name="address">The actual e-mail address.</param>
         /// <param name="displayName">An optional display name.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="address"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="address"/> is empty or consists only of white space.</exception>
         public EmailAddress(string address, string? displayName = null)
         {
+            if (address is null)
+                throw new ArgumentNullException(nameof(address));
+
+            if (string.IsNullOrWhiteSpace(address))
+                throw new ArgumentException($"{nameof(address)} must be provided", nameof(address));
+
             Address = address;
             DisplayName = displayName;
         }
 
         /// <summary>
-        /// Gets or sets the display name of the address.
+        /// Initializes a new instance of the <see cref="EmailAddress"/> class
+        /// using the provided <paramref name="addressTemplate"/>.
         /// </summary>
-        /// <remarks>An optional display name, for example
-        /// Buying Catalogue Team.</remarks>
-        public string? DisplayName { get; set; }
+        /// <param name="addressTemplate">The actual e-mail address.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="addressTemplate"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentException"><see cref="EmailAddressTemplate.Address"/>
+        /// of <paramref name="addressTemplate"/> is <see langref="null"/>.</exception>
+        public EmailAddress(EmailAddressTemplate addressTemplate)
+        {
+            if (addressTemplate is null)
+                throw new ArgumentNullException(nameof(addressTemplate));
+
+            Address = addressTemplate.Address ?? throw new ArgumentException(
+                $"{nameof(EmailAddressTemplate.Address)} of {nameof(addressTemplate)} must be provided",
+                nameof(addressTemplate));
+
+            DisplayName = addressTemplate.DisplayName;
+        }
 
         /// <summary>
-        /// Gets or sets the actual e-mail address.
+        /// Gets the display name of the address.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="value"/> is empty or white space.</exception>
-        public string? Address
-        {
-            get => _address;
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+        /// <remarks>An optional display name, for example Buying Catalogue Team.</remarks>
+        public string? DisplayName { get; }
 
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"{nameof(value)} cannot be empty or white space.", nameof(value));
-
-                _address = value;
-            }
-        }
+        /// <summary>
+        /// Gets the actual e-mail address.
+        /// </summary>
+        public string Address { get; }
     }
 }
