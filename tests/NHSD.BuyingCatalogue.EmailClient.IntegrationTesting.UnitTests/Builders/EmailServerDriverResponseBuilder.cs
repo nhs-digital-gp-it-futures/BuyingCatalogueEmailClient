@@ -64,7 +64,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
             return this;
         }
 
-        public EmailServerDriverResponseBuilder WithHtml(string? html)
+        public EmailServerDriverResponseBuilder WithHtml(string html)
         {
             _html = html;
             return this;
