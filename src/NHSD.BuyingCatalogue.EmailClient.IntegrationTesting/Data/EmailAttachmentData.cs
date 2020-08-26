@@ -10,7 +10,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     public sealed class EmailAttachmentData
     {
         /// <summary>
-        /// The content of the attachment encoded as a string.
+        /// The content of the attachment in a list of bytes.
         /// </summary>
         public List<byte> AttachmentData { get; } = new List<byte>();
 
