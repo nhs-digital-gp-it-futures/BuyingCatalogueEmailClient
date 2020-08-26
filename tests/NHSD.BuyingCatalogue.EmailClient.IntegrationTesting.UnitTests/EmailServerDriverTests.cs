@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Flurl.Http.Testing;
-using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Builders;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers;
+using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders;
 using NUnit.Framework;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
