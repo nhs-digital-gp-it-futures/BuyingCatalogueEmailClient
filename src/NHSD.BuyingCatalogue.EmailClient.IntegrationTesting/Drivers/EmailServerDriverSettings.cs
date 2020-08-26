@@ -8,16 +8,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     public sealed class EmailServerDriverSettings
     {
         /// <summary>
-        ///  EmailServerDriverSettings contains the configuration information used by the EmailServiceDriver.
+        /// Initializes a new instance of the <see cref="EmailServerDriverSettings"/> class
+        /// with the specified <paramref name="smtpServerApiBaseUrl"/>.
         /// </summary>
-        /// <param name="smtpServerApiBaseUrl">EmailServerDriverSettings</param>
+        /// <param name="smtpServerApiBaseUrl">The URL for the SMTP server's REST API.</param>
         public EmailServerDriverSettings(Uri smtpServerApiBaseUrl)
         {
             SmtpServerApiBaseUrl = smtpServerApiBaseUrl ?? throw new ArgumentNullException(nameof(smtpServerApiBaseUrl));
         }
 
         /// <summary>
-        /// SmtpServerApiBaseUrl is the URL used to connect SMTP Server.
+        /// Gets the URL used to connect SMTP Server.
         /// </summary>
         public Uri SmtpServerApiBaseUrl { get; }
     }

@@ -75,11 +75,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         }
 
         /// <summary>
-        /// Gets the binary data associated with the attachment.
+        /// Returns the binary data associated with the attachment.
         /// </summary>
         /// <param name="emailId">Id of the email containg the attachment.</param>
         /// <param name="fileName">file name of the attachment.</param>
-        /// <returns>byte array of attachment data</returns>
+        /// <returns>the binary data associated with the attachment.</returns>
         private async Task<byte[]> DownloadAttachmentAsync(string? emailId, string? fileName)
         {
             if (emailId is null)

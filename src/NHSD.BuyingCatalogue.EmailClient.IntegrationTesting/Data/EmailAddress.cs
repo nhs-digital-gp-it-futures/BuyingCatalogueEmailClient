@@ -3,15 +3,16 @@
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
     /// <summary>
-    /// The Name and Address used to send and receive emails
+    /// Represents an e-mail address.
     /// </summary>
     public sealed class EmailAddress
     {
         /// <summary>
-        /// Creates a EmailAddress containing the Name and address to send to
+        /// Initializes a new instance of the <see cref="EmailAddress"/> class
+        /// with the specified <paramref name="name"/> and <paramref name="address"/>.
         /// </summary>
-        /// <param name="name">Name for example James Dean</param>
-        /// <param name="address">JamesD@email.com</param>
+        /// <param name="name">An options display name, for example James Dean.</param>
+        /// <param name="address">The actual e-mail address.</param>
         public EmailAddress(string name, string address)
         {
             Name = name;
@@ -19,13 +20,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         }
 
         /// <summary>
-        /// The Address.
+        /// Gets or sets the address.
         /// </summary>
         [JsonProperty("address")]
         public string? Address { get; set; }
 
         /// <summary>
-        /// The Names associated with the email address
+        /// Gets or sets the display names associated with the e-mail address.
         /// </summary>
         [JsonProperty("name")]
         public string? Name { get; set; }

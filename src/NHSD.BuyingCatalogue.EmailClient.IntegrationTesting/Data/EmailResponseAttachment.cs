@@ -3,15 +3,16 @@
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
 {
     /// <summary>
-    /// EmailResponseAttachment represents the attachments found in a email response from the MailDev API.
+    /// Represents the attachments found in an e-mail response from the MailDev API.
     /// </summary>
     public sealed class EmailResponseAttachment
     {
         /// <summary>
-        /// Represents metadata found in the Attachment section of a MailDev Email api response.
+        /// Initializes a new instance of the <see cref="EmailResponseAttachment"/> class
+        /// with the specified <paramref name="contentType"/> and <paramref name="fileName"/>.
         /// </summary>
         /// <param name="contentType">The content type of the attachment.</param>
-        /// <param name="fileName">the file name of the attachment</param>
+        /// <param name="fileName">The file name of the attachment.</param>
         public EmailResponseAttachment(string contentType, string fileName)
         {
             FileName = fileName;
@@ -19,15 +20,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         }
 
         /// <summary>
-        /// The Content Type associated with the attachment.
+        /// Gets the content type of the attachment.
         /// </summary>
         [JsonProperty("contentType")]
-        public string? ContentType { get; set; }
+        public string? ContentType { get; }
 
         /// <summary>
-        /// The file name of the attachment.
+        /// Gets the file name of the attachment.
         /// </summary>
         [JsonProperty("fileName")]
-        public string? FileName { get; set; }
+        public string? FileName { get; }
     }
 }
