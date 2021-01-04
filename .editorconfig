@@ -183,12 +183,6 @@ csharp_preserve_single_line_blocks = true
 # Code Analysis Severity      #
 ###############################
 
-# CA1002: Do not expose generic lists (to be reinstated)
-dotnet_diagnostic.CA1002.severity = none
-
-# CA2007: Consider calling ConfigureAwait on the awaited task
-dotnet_diagnostic.CA2007.severity = none
-
 # IDE0079: Remove unnecessary suppression (ReSharper)
 dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper
 
@@ -203,3 +197,6 @@ dotnet_diagnostic.SA1503.severity = none
 
 # SA1633: File should have header
 dotnet_diagnostic.SA1633.severity = none
+
+# SX1101: Do not prefix local members with this
+dotnet_diagnostic.SX1101.severity = warning

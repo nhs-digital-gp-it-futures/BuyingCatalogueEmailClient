@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Flurl;
@@ -36,7 +35,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns>the number of e-mails in the mailbox.</returns>
         public async Task<int> GetEmailCountAsync()
         {
-            var emailList = await FindAllEmailsAsync();
+            var emailList = await FindAllEmailsAsync().ConfigureAwait(false);
             return emailList.Count;
         }
 
@@ -50,12 +49,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegment("email")
-                .GetJsonAsync<EmailResponse[]>();
+                .GetJsonAsync<EmailResponse[]>()
+                .ConfigureAwait(false);
 
             var emails = new List<Email>();
             foreach (var emailResponse in responseBody)
             {
-                emails.Add(await ProcessEmailResponseAsync(emailResponse));
+                emails.Add(await ProcessEmailResponseAsync(emailResponse).ConfigureAwait(false));
             }
 
             return emails;
@@ -71,7 +71,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegments("email", "all")
-                .DeleteAsync();
+                .DeleteAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -99,10 +100,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 .AppendPathSegment(emailId)
                 .AppendPathSegment("attachment")
                 .AppendPathSegment(fileName)
-                .GetStreamAsync();
+                .GetStreamAsync()
+                .ConfigureAwait(false);
 
             await using var memoryStream = new MemoryStream();
-            await attachmentData.CopyToAsync(memoryStream);
+            await attachmentData.CopyToAsync(memoryStream).ConfigureAwait(false);
             return memoryStream.ToArray();
         }
 
@@ -119,9 +121,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 Html = response.Html,
                 Subject = response.Subject,
             };
-            email.From.AddRange(response.From.Where(x => x != null));
-            email.To.AddRange(response.To.Where(x => x != null));
-            email.Attachments.AddRange(await ExtractAttachmentsMetadataAsync(response));
+
+            email.AddSenders(response.From);
+            email.AddRecipients(response.To);
+            email.AddAttachments(await ExtractAttachmentsMetadataAsync(response).ConfigureAwait(false));
+
             return email;
         }
 
@@ -138,7 +142,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
             {
                 string fileName = attachment.FileName;
                 var contentType = attachment.ContentType;
-                var data = await DownloadAttachmentAsync(emailResponse.Id, fileName);
+                var data = await DownloadAttachmentAsync(emailResponse.Id, fileName).ConfigureAwait(false);
                 var result = new EmailAttachmentData(data, fileName, new ContentType(contentType));
                 attachmentResults.Add(result);
             }

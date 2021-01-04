@@ -21,11 +21,11 @@
         public int Port { get; init; }
 
         /// <summary>
-        /// Gets a value indicating whether to allow connections
+        /// Gets or sets a value indicating whether to allow connections
         /// to an SMTP server that does not present a valid/trusted certificate.
         /// </summary>
         /// <remarks>This should only be enabled in test environments.</remarks>
-        public bool? AllowInvalidCertificate { get; init; }
+        public bool? AllowInvalidCertificate { get; set; }
 
         /// <summary>
         /// Gets the value used to prefix the subject in e-mails.

@@ -53,16 +53,16 @@ namespace NHSD.BuyingCatalogue.EmailClient
             if (emailMessage is null)
                 throw new ArgumentNullException(nameof(emailMessage));
 
-            await client.ConnectAsync(settings.Host, settings.Port);
+            await client.ConnectAsync(settings.Host, settings.Port).ConfigureAwait(false);
 
             try
             {
                 var authentication = settings.Authentication;
                 if (authentication.IsRequired)
-                    await client.AuthenticateAsync(authentication.UserName, authentication.Password);
+                    await client.AuthenticateAsync(authentication.UserName, authentication.Password).ConfigureAwait(false);
 
                 var mimeMessage = emailMessage.AsMimeMessage(settings.EmailSubjectPrefix);
-                await client.SendAsync(mimeMessage);
+                await client.SendAsync(mimeMessage).ConfigureAwait(false);
 
                 logger.LogInformation(
                     "SendEmailAsync: Sent: {server}:{port} with auth required {isRequired} and U:{user}, Sent Message {mimeMessage}",
@@ -88,7 +88,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
             finally
             {
                 if (client.IsConnected)
-                    await client.DisconnectAsync(true);
+                    await client.DisconnectAsync(true).ConfigureAwait(false);
             }
         }
     }

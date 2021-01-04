@@ -142,7 +142,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
                 .ShouldHaveCalled("http://email.com/email/*/attachment/attachment1.txt")
                 .WithVerb(HttpMethod.Get);
 
-            var attachmentData = resultEmail.Attachments.First().AttachmentData;
+            var attachmentData = resultEmail.Attachments[0].AttachmentData;
             var attachmentContent = Encoding.UTF8.GetString(attachmentData.ToArray());
 
             attachmentContent.Should().Be("This is the attachment");

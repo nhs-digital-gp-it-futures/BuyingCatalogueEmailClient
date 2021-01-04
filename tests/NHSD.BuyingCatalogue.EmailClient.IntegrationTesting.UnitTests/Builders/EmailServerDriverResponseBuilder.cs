@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data;
 
 namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
@@ -49,10 +51,24 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
                 Text = Text,
             };
 
-            response.To.AddRange(to);
-            response.From.AddRange(from);
-            response.Attachments.AddRange(attachmentContent);
+            SetCollectionProperty(response, nameof(EmailResponse.To), to);
+            SetCollectionProperty(response, nameof(EmailResponse.From), from);
+            SetCollectionProperty(response, nameof(EmailResponse.Attachments), attachmentContent);
+
             return response;
+        }
+
+        [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Needs to be lower")]
+        private static void SetCollectionProperty<T>(
+            EmailResponse response,
+            string propertyName,
+            IEnumerable<T> values)
+        {
+            var fieldInfo = response.GetType().GetField(
+                propertyName.ToLowerInvariant(),
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            fieldInfo?.SetValue(response, values);
         }
     }
 }
