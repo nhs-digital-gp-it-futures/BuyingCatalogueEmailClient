@@ -11,17 +11,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class EmailAttachmentTests
     {
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Constructor_NullFileName_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new EmailAttachment(null!, Mock.Of<Stream>()));
-        }
-
+        [TestCase(null)]
         [TestCase("")]
         [TestCase("\t")]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Constructor_WhiteSpaceFileName_ThrowsArgumentException(string fileName)
+        public static void Constructor_NullEmptyOrWhiteSpaceFileName_ThrowsArgumentException(string fileName)
         {
             Assert.Throws<ArgumentException>(() => new EmailAttachment(fileName, Mock.Of<Stream>()));
         }

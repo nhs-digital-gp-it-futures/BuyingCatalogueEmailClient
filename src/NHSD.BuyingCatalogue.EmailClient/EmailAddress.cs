@@ -13,13 +13,10 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// </summary>
         /// <param name="address">The actual e-mail address.</param>
         /// <param name="displayName">An optional display name.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="address"/> is <see langref="null"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="address"/> is empty or consists only of white space.</exception>
+        /// <exception cref="ArgumentException"><paramref name="address"/> is <see langword="null"/>, empty or consists
+        /// only of white space.</exception>
         public EmailAddress(string address, string? displayName = null)
         {
-            if (address is null)
-                throw new ArgumentNullException(nameof(address));
-
             if (string.IsNullOrWhiteSpace(address))
                 throw new ArgumentException($"{nameof(address)} must be provided", nameof(address));
 
@@ -32,9 +29,10 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// using the provided <paramref name="addressTemplate"/>.
         /// </summary>
         /// <param name="addressTemplate">The actual e-mail address.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="addressTemplate"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="addressTemplate"/> is
+        /// <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><see cref="EmailAddressTemplate.Address"/>
-        /// of <paramref name="addressTemplate"/> is <see langref="null"/>.</exception>
+        /// of <paramref name="addressTemplate"/> is <see langword="null"/>.</exception>
         public EmailAddress(EmailAddressTemplate addressTemplate)
         {
             if (addressTemplate is null)

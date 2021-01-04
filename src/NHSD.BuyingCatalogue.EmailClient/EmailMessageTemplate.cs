@@ -30,7 +30,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <summary>
         /// Gets or sets the sender (from address) of the message.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
         public EmailAddressTemplate? Sender
         {
             get => _sender;

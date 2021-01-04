@@ -10,31 +10,31 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets the list of senders' addresses.
         /// </summary>
-        public List<EmailAddress> From { get; } = new List<EmailAddress>();
+        public List<EmailAddress> From { get; } = new();
 
         /// <summary>
         /// Gets the list of To (recipient's) address.
         /// </summary>
-        public List<EmailAddress> To { get; } = new List<EmailAddress>();
+        public List<EmailAddress> To { get; } = new();
 
         /// <summary>
         /// Gets or sets the subject of the e-mail.
         /// </summary>
-        public string? Subject { get; set; } = null!;
+        public string? Subject { get; init; } = null!;
 
         /// <summary>
         /// Gets or sets the plain-text body of the e-mail.
         /// </summary>
-        public string? Text { get; set; } = null!;
+        public string? Text { get; init; } = null!;
 
         /// <summary>
         /// Gets or sets the HTML body of the e-mail.
         /// </summary>
-        public string? Html { get; set; } = null!;
+        public string? Html { get; init; } = null!;
 
         /// <summary>
         /// Gets the list of attachments.
         /// </summary>
-        public List<EmailAttachmentData> Attachments { get; } = new List<EmailAttachmentData>();
+        public List<EmailAttachmentData> Attachments { get; } = new();
     }
 }

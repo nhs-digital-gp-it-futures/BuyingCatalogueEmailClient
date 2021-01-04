@@ -9,7 +9,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     /// </summary>
     public sealed class EmailAttachmentData
     {
-        private readonly List<byte> _attachmentData = new List<byte>();
+        private readonly List<byte> _attachmentData = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailAttachmentData"/> class

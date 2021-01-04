@@ -7,9 +7,9 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
     internal sealed class EmailServerDriverResponseBuilder
     {
         private const string Text = "Dear Sir or Madam";
-        private readonly List<EmailAddress> _to = new List<EmailAddress>();
-        private readonly List<EmailAddress> _from = new List<EmailAddress>();
-        private readonly List<EmailResponseAttachment> _attachmentContent = new List<EmailResponseAttachment>();
+        private readonly List<EmailAddress> _to = new();
+        private readonly List<EmailAddress> _from = new();
+        private readonly List<EmailResponseAttachment> _attachmentContent = new();
         private string _subject;
         private string _html;
 
@@ -24,7 +24,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
 
         public static EmailServerDriverResponseBuilder Create()
         {
-            return new EmailServerDriverResponseBuilder();
+            return new();
         }
 
         public EmailServerDriverResponseBuilder WithSubject(string subject)

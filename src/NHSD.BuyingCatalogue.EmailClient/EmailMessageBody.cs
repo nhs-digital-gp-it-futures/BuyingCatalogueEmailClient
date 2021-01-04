@@ -9,7 +9,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class EmailMessageBody
     {
-        private readonly List<object> _formatItems = new List<object>();
+        private readonly List<object> _formatItems = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailMessageBody"/> class
@@ -31,7 +31,8 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <summary>
         /// Gets the content of the message body.
         /// </summary>
-        /// <remarks>Accepts format items; see <see cref="string.Format(string, object[])"/> for formatting options.</remarks>
+        /// <remarks>Accepts format items; see <see cref="string.Format(string, object[])"/> for formatting
+        /// options.</remarks>
         public string Content { get; }
 
         /// <summary>

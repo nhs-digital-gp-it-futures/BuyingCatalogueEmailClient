@@ -9,8 +9,8 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class EmailMessage
     {
-        private readonly List<EmailAttachment> _attachments = new List<EmailAttachment>();
-        private readonly List<EmailAddress> _recipients = new List<EmailAddress>();
+        private readonly List<EmailAttachment> _attachments = new();
+        private readonly List<EmailAddress> _recipients = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailMessage"/> class
@@ -21,12 +21,14 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <param name="recipients">The recipient(s) of the e-mail.</param>
         /// <param name="attachments">Any attachments to the e-mail.</param>
         /// <param name="formatItems">Any format items to format the content with.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="template"/> is <see langref="null"/>.</exception>
-        /// <exception cref="ArgumentException"><see cref="EmailMessageTemplate.Sender"/> of <paramref name="template"/>
-        /// is <see langref="null"/> or does not have an address.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="recipients"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="template"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException"><see cref="EmailMessageTemplate.Sender"/> of
+        /// <paramref name="template"/> is <see langword="null"/> or does not have an address.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="recipients"/> is
+        /// <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="recipients"/> is empty.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="formatItems"/> is <see langref="null"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="formatItems"/> is
+        /// <see langword="null"/>.</exception>
         public EmailMessage(
             EmailMessageTemplate template,
             ICollection<EmailAddress> recipients,
@@ -46,8 +48,12 @@ namespace NHSD.BuyingCatalogue.EmailClient
             if (recipients.Count == 0)
                 throw new ArgumentException("At least one recipient must be specified.", nameof(recipients));
 
+#pragma warning disable CA1508 // Avoid dead conditional code (false positive)
+
             if (formatItems is null)
                 throw new ArgumentNullException(nameof(formatItems));
+
+#pragma warning restore CA1508 // Avoid dead conditional code
 
             _recipients.AddRange(recipients);
             Subject = template.Subject;

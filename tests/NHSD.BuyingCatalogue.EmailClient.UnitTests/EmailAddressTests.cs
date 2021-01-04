@@ -9,20 +9,13 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class EmailAddressTests
     {
-        [Test]
+        [TestCase(null)]
         [TestCase("")]
         [TestCase("\t")]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Constructor_String_EmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
+        public static void Constructor_String_NullEmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
         {
             Assert.Throws<ArgumentException>(() => new EmailAddress(address));
-        }
-
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Constructor_String_NullAddress_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new EmailAddress(((string)null)!));
         }
 
         [Test]
