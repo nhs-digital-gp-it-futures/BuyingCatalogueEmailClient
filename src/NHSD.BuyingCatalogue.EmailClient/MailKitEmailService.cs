@@ -12,9 +12,9 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class MailKitEmailService : IEmailService
     {
-        private readonly IMailTransport _client;
-        private readonly ILogger<MailKitEmailService> _logger;
-        private readonly SmtpSettings _settings;
+        private readonly IMailTransport client;
+        private readonly ILogger<MailKitEmailService> logger;
+        private readonly SmtpSettings settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MailKitEmailService" /> class
@@ -32,9 +32,9 @@ namespace NHSD.BuyingCatalogue.EmailClient
             Justification = "Certificate validation only disabled when specified in configuration (for use in test environments only)")]
         public MailKitEmailService(IMailTransport client, SmtpSettings settings, ILogger<MailKitEmailService> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _settings = settings ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(client));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             if (settings.AllowInvalidCertificate.GetValueOrDefault())
                 client.ServerCertificateValidationCallback = (_, _, _, _) => true;
@@ -53,42 +53,42 @@ namespace NHSD.BuyingCatalogue.EmailClient
             if (emailMessage is null)
                 throw new ArgumentNullException(nameof(emailMessage));
 
-            await _client.ConnectAsync(_settings.Host, _settings.Port);
+            await client.ConnectAsync(settings.Host, settings.Port);
 
             try
             {
-                var authentication = _settings.Authentication;
+                var authentication = settings.Authentication;
                 if (authentication.IsRequired)
-                    await _client.AuthenticateAsync(authentication.UserName, authentication.Password);
+                    await client.AuthenticateAsync(authentication.UserName, authentication.Password);
 
-                var mimeMessage = emailMessage.AsMimeMessage(_settings.EmailSubjectPrefix);
-                await _client.SendAsync(mimeMessage);
+                var mimeMessage = emailMessage.AsMimeMessage(settings.EmailSubjectPrefix);
+                await client.SendAsync(mimeMessage);
 
-                _logger.LogInformation(
+                logger.LogInformation(
                     "SendEmailAsync: Sent: {server}:{port} with auth required {isRequired} and U:{user}, Sent Message {mimeMessage}",
-                    _settings.Host,
-                    _settings.Port,
+                    settings.Host,
+                    settings.Port,
                     authentication.IsRequired,
                     authentication.UserName,
                     mimeMessage);
             }
             catch (Exception ex)
             {
-                _logger.LogError(
+                logger.LogError(
                     ex,
                     "SendEmailAsync: Failed: {server}:{port} with auth required {isRequired} and U:{user}, Sending Message {@mimeMessage}",
-                    _settings.Host,
-                    _settings.Port,
-                    _settings.Authentication.IsRequired,
-                    _settings.Authentication.UserName,
+                    settings.Host,
+                    settings.Port,
+                    settings.Authentication.IsRequired,
+                    settings.Authentication.UserName,
                     emailMessage);
 
                 throw;
             }
             finally
             {
-                if (_client.IsConnected)
-                    await _client.DisconnectAsync(true);
+                if (client.IsConnected)
+                    await client.DisconnectAsync(true);
             }
         }
     }

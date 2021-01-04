@@ -18,17 +18,17 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         public List<EmailAddress> To { get; } = new();
 
         /// <summary>
-        /// Gets or sets the subject of the e-mail.
+        /// Gets the subject of the e-mail.
         /// </summary>
         public string? Subject { get; init; } = null!;
 
         /// <summary>
-        /// Gets or sets the plain-text body of the e-mail.
+        /// Gets the plain-text body of the e-mail.
         /// </summary>
         public string? Text { get; init; } = null!;
 
         /// <summary>
-        /// Gets or sets the HTML body of the e-mail.
+        /// Gets the HTML body of the e-mail.
         /// </summary>
         public string? Html { get; init; } = null!;
 

@@ -8,17 +8,28 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.BuyingCatalogue.EmailClient", "src\NHSD.BuyingCatalogue.EmailClient\NHSD.BuyingCatalogue.EmailClient.csproj", "{39292E1F-CDFB-4F7F-8591-2E530EFF0B73}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{373987BB-D19A-499D-BDDC-6A7347ECA4E6}"
+	ProjectSection(SolutionItems) = preProject
+		tests\.editorconfig = tests\.editorconfig
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.BuyingCatalogue.EmailClient.UnitTests", "tests\NHSD.BuyingCatalogue.EmailClient.UnitTests\NHSD.BuyingCatalogue.EmailClient.UnitTests.csproj", "{AD8AAAF6-E070-4B6F-BF22-D4F09688A756}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{702B8934-E875-48AC-ADE8-258B257C57F7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		NHSD.BuyingCatalogue.EmailClient.sln.DotSettings = NHSD.BuyingCatalogue.EmailClient.sln.DotSettings
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.BuyingCatalogue.EmailClient.IntegrationTesting", "src\NHSD.BuyingCatalogue.EmailClient.IntegrationTesting\NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.csproj", "{CD881F99-F365-4F5F-AB4F-44C6E4A18974}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests", "tests\NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests\NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.csproj", "{2D33E541-D7B1-41C5-85BA-5EF2ABD97EA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionaries", "Dictionaries", "{8707A420-A521-4A14-BC3E-5056BF7FE786}"
+	ProjectSection(SolutionItems) = preProject
+		Dictionaries\en_GB-large.aff = Dictionaries\en_GB-large.aff
+		Dictionaries\en_GB-large.dic = Dictionaries\en_GB-large.dic
+		Dictionaries\README_en_GB-large.txt = Dictionaries\README_en_GB-large.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

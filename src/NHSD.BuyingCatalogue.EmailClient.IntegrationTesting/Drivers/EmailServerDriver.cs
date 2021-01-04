@@ -18,7 +18,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
     [Binding]
     public sealed class EmailServerDriver
     {
-        private readonly EmailServerDriverSettings _emailServerDriverSettings;
+        private readonly EmailServerDriverSettings emailServerDriverSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailServerDriver" /> class
@@ -27,7 +27,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <param name="emailServerDriverSettings">The EmailDriverSettings object containing the URL of the SMTP server.</param>
         public EmailServerDriver(EmailServerDriverSettings emailServerDriverSettings)
         {
-            _emailServerDriverSettings = emailServerDriverSettings ?? throw new ArgumentNullException(nameof(emailServerDriverSettings));
+            this.emailServerDriverSettings = emailServerDriverSettings ?? throw new ArgumentNullException(nameof(emailServerDriverSettings));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns>a list containing all e-mails in the mailbox.</returns>
         public async Task<IReadOnlyList<Email>> FindAllEmailsAsync()
         {
-            var responseBody = await _emailServerDriverSettings
+            var responseBody = await emailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegment("email")
@@ -67,7 +67,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <returns>An asynchronous <see cref="Task" /> context.</returns>
         public async Task ClearAllEmailsAsync()
         {
-            await _emailServerDriverSettings
+            await emailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegments("email", "all")
@@ -92,7 +92,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            var attachmentData = await _emailServerDriverSettings
+            var attachmentData = await emailServerDriverSettings
                 .SmtpServerApiBaseUrl
                 .AbsoluteUri
                 .AppendPathSegment("email")

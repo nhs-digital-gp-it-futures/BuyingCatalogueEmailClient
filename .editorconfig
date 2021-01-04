@@ -191,3 +191,15 @@ dotnet_diagnostic.CA2007.severity = none
 
 # IDE0079: Remove unnecessary suppression (ReSharper)
 dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1200: Using directives should be placed correctly
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1503: Braces should not be omitted
+dotnet_diagnostic.SA1503.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
