@@ -33,18 +33,19 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <summary>
         /// Gets or sets the actual e-mail address.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langref="null"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="value"/> is empty or white space.</exception>
+        /// <exception cref="ArgumentException"><paramref name="value"/> is <see langword="null"/>, empty or
+        /// white space.</exception>
         public string? Address
         {
             get => _address;
             set
             {
-                if (value is null)
-                    throw new ArgumentNullException(nameof(value));
-
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException($"{nameof(value)} cannot be empty or white space.", nameof(value));
+                {
+                    throw new ArgumentException(
+                        $"{nameof(value)} cannot be null, empty or white space.",
+                        nameof(value));
+                }
 
                 _address = value;
             }

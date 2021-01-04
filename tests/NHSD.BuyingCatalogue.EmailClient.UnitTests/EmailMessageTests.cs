@@ -12,7 +12,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class EmailMessageTests
     {
-        private static EmailMessageTemplate EmptyTemplate => new EmailMessageTemplate(new EmailAddressTemplate("from@sender.test"));
+        private static EmailMessageTemplate EmptyTemplate => new(new EmailAddressTemplate("from@sender.test"));
 
         private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress("to@recipient.test") };
 

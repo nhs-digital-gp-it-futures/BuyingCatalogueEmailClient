@@ -118,7 +118,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
         }
 
         [Test]
-        public static async Task EmailServerDriver_DownloadAttachmentAsync_DownloadaData()
+        public static async Task EmailServerDriver_DownloadAttachmentAsync_DownloadsData()
         {
             var settings = new EmailServerDriverSettings(new Uri("http://email.com/"));
             var driver = new EmailServerDriver(settings);

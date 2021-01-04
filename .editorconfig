@@ -1,19 +1,20 @@
 # To learn more about .editorconfig see https://aka.ms/editorconfigdocs
 
-# top-most EditorConfig file
-root = true
-
 ###############################
 # Core EditorConfig Options   #
 ###############################
-# All files
+
+# top-most EditorConfig file
+root = true
+
+# Don't use tabs for indentation.
 [*]
 indent_style = space
+insert_final_newline = true
 
 # Code files
 [*.{cs,csx,vb,vbx}]
 indent_size = 4
-insert_final_newline = true
 charset = utf-8-bom
 
 # XML project files
@@ -106,14 +107,14 @@ dotnet_naming_symbols.constant_fields.applicable_accessibilities  = *
 dotnet_naming_symbols.constant_fields.required_modifiers          = const
 
 ###############################
-# C# Coding Conventions       #
+# C# Code Style Rules         #
 ###############################
 
 [*.cs]
 # var preferences
 csharp_style_var_for_built_in_types = true:silent
 csharp_style_var_when_type_is_apparent = true:silent
-csharp_style_var_elsewhere = true:silent
+csharp_style_var_elsewhere = false:silent
 
 # Expression-bodied members
 csharp_style_expression_bodied_methods = false:silent
@@ -135,7 +136,7 @@ csharp_style_conditional_delegate_call = true:suggestion
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
 
 # Expression-level preferences
-csharp_prefer_braces = true:silent
+csharp_prefer_braces = false:silent
 csharp_style_deconstructed_variable_declaration = true:suggestion
 csharp_prefer_simple_default_expression = true:suggestion
 csharp_style_pattern_local_over_anonymous_function = true:suggestion
@@ -182,5 +183,11 @@ csharp_preserve_single_line_blocks = true
 # Code Analysis Severity      #
 ###############################
 
+# CA1002: Do not expose generic lists (to be reinstated)
+dotnet_diagnostic.CA1002.severity = none
+
 # CA2007: Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2007.severity = none
+
+# IDE0079: Remove unnecessary suppression (ReSharper)
+dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper

@@ -28,17 +28,11 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             template.DisplayName.Should().Be(expectedDisplayName);
         }
 
-        [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Address_Set_NullAddress_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new EmailAddressTemplate { Address = null });
-        }
-
+        [TestCase(null)]
         [TestCase("")]
         [TestCase("\t")]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "Exception testing")]
-        public static void Address_Set_EmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
+        public static void Address_Set_NullEmptyOrWhiteSpaceAddress_ThrowsArgumentException(string address)
         {
             Assert.Throws<ArgumentException>(() => new EmailAddressTemplate { Address = address });
         }

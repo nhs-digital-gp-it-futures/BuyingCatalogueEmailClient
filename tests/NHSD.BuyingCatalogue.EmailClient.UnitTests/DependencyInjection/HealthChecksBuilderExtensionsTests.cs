@@ -216,15 +216,15 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
 
         private sealed class AddSmtpHealthCheckArgs
         {
-            internal HealthStatus? FailureStatus { get; set; }
+            internal HealthStatus? FailureStatus { get; init; }
 
-            internal string Name { get; set; }
+            internal string Name { get; init; }
 
-            internal SmtpHealthCheckOptions Options { get; set; }
+            internal SmtpHealthCheckOptions Options { get; init; }
 
-            internal ICollection<string> Tags { get; set; }
+            internal ICollection<string> Tags { get; init; }
 
-            internal TimeSpan? Timeout { get; set; }
+            internal TimeSpan? Timeout { get; init; }
         }
     }
 }

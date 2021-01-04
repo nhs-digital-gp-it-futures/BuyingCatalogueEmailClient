@@ -20,7 +20,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class MailKitEmailServiceTests
     {
-        private static EmailMessageTemplate BasicTemplate => new EmailMessageTemplate(new EmailAddressTemplate("from@sender.test"))
+        private static EmailMessageTemplate BasicTemplate => new(new EmailAddressTemplate("from@sender.test"))
         {
             Subject = "subject",
         };

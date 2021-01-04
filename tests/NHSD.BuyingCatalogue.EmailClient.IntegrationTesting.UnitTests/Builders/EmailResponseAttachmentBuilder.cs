@@ -17,12 +17,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests.Builders
 
         public static EmailResponseAttachmentBuilder Create()
         {
-            return new EmailResponseAttachmentBuilder();
+            return new();
         }
 
         public EmailResponseAttachment Build()
         {
-            return new EmailResponseAttachment(ContentType, FileName);
+            return new(ContentType, FileName);
         }
     }
 }

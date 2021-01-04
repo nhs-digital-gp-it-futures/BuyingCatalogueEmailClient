@@ -77,7 +77,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
         /// <summary>
         /// Returns the binary data associated with the attachment.
         /// </summary>
-        /// <param name="emailId">Id of the email containg the attachment.</param>
+        /// <param name="emailId">Id of the email containing the attachment.</param>
         /// <param name="fileName">file name of the attachment.</param>
         /// <returns>the binary data associated with the attachment.</returns>
         private async Task<byte[]> DownloadAttachmentAsync(string? emailId, string? fileName)
@@ -136,7 +136,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Drivers
 
             foreach (var attachment in emailResponse.Attachments)
             {
-                string? fileName = attachment.FileName;
+                string fileName = attachment.FileName;
                 var contentType = attachment.ContentType;
                 var data = await DownloadAttachmentAsync(emailResponse.Id, fileName);
                 var result = new EmailAttachmentData(data, fileName, new ContentType(contentType));

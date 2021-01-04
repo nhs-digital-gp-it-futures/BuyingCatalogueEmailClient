@@ -23,9 +23,9 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <param name="client">The mail transport to use to send e-mail.</param>
         /// <param name="settings">The SMTP configuration.</param>
         /// <param name="logger">logger for log messages.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langref="null" />.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="settings" /> is <see langref="null" />.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="logger" /> is <see langref="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="settings" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="logger" /> is <see langword="null" />.</exception>
         [SuppressMessage(
             "Security",
             "CA5359:Do Not Disable Certificate Validation",
@@ -37,7 +37,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             if (settings.AllowInvalidCertificate.GetValueOrDefault())
-                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                client.ServerCertificateValidationCallback = (_, _, _, _) => true;
         }
 
         /// <summary>
@@ -46,7 +46,8 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// </summary>
         /// <param name="emailMessage">The e-mail message to send asynchronously.</param>
         /// <returns>An asynchronous <see cref="Task"/> context.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="emailMessage" /> is <see langref="null" />.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="emailMessage" /> is
+        /// <see langword="null" />.</exception>
         public async Task SendEmailAsync(EmailMessage emailMessage)
         {
             if (emailMessage is null)

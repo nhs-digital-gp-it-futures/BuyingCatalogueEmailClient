@@ -12,7 +12,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
     [Parallelizable(ParallelScope.All)]
     internal static class MimeKitExtensionsTests
     {
-        private static EmailMessageTemplate BasicTemplate => new EmailMessageTemplate(new EmailAddressTemplate("sender@somedomain.nhs.test"));
+        private static EmailMessageTemplate BasicTemplate => new(new EmailAddressTemplate("sender@somedomain.nhs.test"));
 
         private static ICollection<EmailAddress> SingleRecipient => new[] { new EmailAddress("recipient@somedomain.nhs.test") };
 

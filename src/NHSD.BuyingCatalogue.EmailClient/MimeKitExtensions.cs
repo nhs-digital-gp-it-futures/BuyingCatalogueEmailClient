@@ -13,7 +13,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <param name="address">The receiving <see cref="EmailAddress"/> instance.</param>
         /// <returns>the corresponding <see cref="MailboxAddress"/>.</returns>
         internal static MailboxAddress AsMailboxAddress(this EmailAddress address)
-            => new MailboxAddress(address.DisplayName, address.Address);
+            => new(address.DisplayName, address.Address);
 
         /// <summary>
         /// Returns the receiver as a <see cref="MimeMessage"/>.

@@ -10,7 +10,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.UnitTests
     internal static class EmailAttachmentTests
     {
         private const string FileName = "file.pdf";
-        private static readonly ContentType _contentType = new ContentType(MediaTypeNames.Application.Json);
+        private static readonly ContentType _contentType = new(MediaTypeNames.Application.Json);
         private static readonly byte[] _dataArray = { 23, 34, 54 };
 
         [Test]

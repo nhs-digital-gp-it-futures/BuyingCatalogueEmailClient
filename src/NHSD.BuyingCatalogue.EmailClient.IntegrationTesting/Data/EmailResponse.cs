@@ -36,18 +36,18 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// Gets the list of From addresses of the email.
         /// </summary>
         [JsonProperty("from")]
-        public List<EmailAddress> From { get; } = new List<EmailAddress>();
+        public List<EmailAddress> From { get; } = new();
 
         /// <summary>
         /// Gets the list of To addresses of the email.
         /// </summary>
         [JsonProperty("to")]
-        public List<EmailAddress> To { get; } = new List<EmailAddress>();
+        public List<EmailAddress> To { get; } = new();
 
         /// <summary>
         /// Gets a list of the attachment metadata.
         /// </summary>
         [JsonProperty("attachments")]
-        public List<EmailResponseAttachment> Attachments { get; } = new List<EmailResponseAttachment>();
+        public List<EmailResponseAttachment> Attachments { get; } = new();
     }
 }

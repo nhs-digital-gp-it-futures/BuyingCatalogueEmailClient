@@ -23,12 +23,12 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// Gets the content type of the attachment.
         /// </summary>
         [JsonProperty("contentType")]
-        public string? ContentType { get; }
+        public string ContentType { get; }
 
         /// <summary>
         /// Gets the file name of the attachment.
         /// </summary>
         [JsonProperty("fileName")]
-        public string? FileName { get; }
+        public string FileName { get; }
     }
 }
