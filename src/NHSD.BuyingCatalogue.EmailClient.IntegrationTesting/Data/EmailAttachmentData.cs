@@ -9,7 +9,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     /// </summary>
     public sealed class EmailAttachmentData
     {
-        private readonly List<byte> _attachmentData = new();
+        private readonly List<byte> attachmentData = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailAttachmentData"/> class
@@ -25,7 +25,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            _attachmentData.AddRange(data);
+            attachmentData.AddRange(data);
             FileName = fileName;
             ContentType = mediaType;
         }
@@ -33,7 +33,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets the content of the attachment in a list of bytes.
         /// </summary>
-        public IReadOnlyList<byte> AttachmentData => _attachmentData;
+        public IReadOnlyList<byte> AttachmentData => attachmentData;
 
         /// <summary>
         /// Gets the file name of the attachment.

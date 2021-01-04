@@ -33,78 +33,78 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
         [Test]
         public static void AddSmtpHealthCheck_SetsExpectedFailureStatus()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings());
 
-            healthCheckArgs.FailureStatus.Should().Be(HealthStatus.Degraded);
+            healthCheckArguments.FailureStatus.Should().Be(HealthStatus.Degraded);
         }
 
         [Test]
         public static void AddSmtpHealthCheck_SetsExpectedName()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings());
 
-            healthCheckArgs.Name.Should().Be(HealthCheck.Name);
+            healthCheckArguments.Name.Should().Be(HealthCheck.Name);
         }
 
         [Test]
         public static void AddSmtpHealthCheck_NullTags_SetsDefaultTags()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings());
 
-            healthCheckArgs.Tags.Should().BeEquivalentTo(HealthCheck.DefaultTags);
+            healthCheckArguments.Tags.Should().BeEquivalentTo(HealthCheck.DefaultTags);
         }
 
         [Test]
         public static void AddSmtpHealthCheck_SetsAllowInvalidRemoteCertificatesOption()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var settings = new SmtpSettings { AllowInvalidCertificate = true };
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(settings);
 
-            healthCheckArgs.Options.AllowInvalidRemoteCertificates.Should().BeTrue();
+            healthCheckArguments.Options.AllowInvalidRemoteCertificates.Should().BeTrue();
         }
 
         [Test]
         public static void AddSmtpHealthCheck_SetsConnectionTypeOption()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings());
 
-            healthCheckArgs.Options.ConnectionType.Should().Be(SmtpConnectionType.TLS);
+            healthCheckArguments.Options.ConnectionType.Should().Be(SmtpConnectionType.TLS);
         }
 
         [Test]
@@ -112,18 +112,18 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
         {
             const string expectedHost = "myHost";
 
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var settings = new SmtpSettings { Host = expectedHost };
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(settings);
 
-            healthCheckArgs.Options.Host.Should().Be(expectedHost);
+            healthCheckArguments.Options.Host.Should().Be(expectedHost);
         }
 
         [Test]
@@ -131,72 +131,72 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
         {
             const int expectedPort = 1234;
 
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var settings = new SmtpSettings { Port = expectedPort };
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(settings);
 
-            healthCheckArgs.Options.Port.Should().Be(expectedPort);
+            healthCheckArguments.Options.Port.Should().Be(expectedPort);
         }
 
         [Test]
         public static void AddSmtpHealthCheck_SetsExpectedTags()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var tags = new[] { "myTag" };
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings(), tags);
 
-            healthCheckArgs.Tags.Should().BeEquivalentTo(tags);
+            healthCheckArguments.Tags.Should().BeEquivalentTo(tags);
         }
 
         [Test]
         public static void AddSmtpHealthCheck_NullTimeout_SetsDefaultTimeout()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings());
 
-            healthCheckArgs.Timeout.Should().Be(HealthCheck.DefaultTimeout);
+            healthCheckArguments.Timeout.Should().Be(HealthCheck.DefaultTimeout);
         }
 
         [Test]
         public static void AddSmtpHealthCheck_SetsExpectedTimeout()
         {
-            AddSmtpHealthCheckArgs healthCheckArgs = null;
+            AddSmtpHealthCheckArguments healthCheckArguments = null;
 
             var mockBuilder = new Mock<IHealthChecksBuilder>();
             mockBuilder.Setup(b => b.Add(It.IsNotNull<HealthCheckRegistration>()))
-                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArgs));
+                .Callback<HealthCheckRegistration>(r => AddSmtpHealthCheckCallback(r, out healthCheckArguments));
 
             var timeout = TimeSpan.FromSeconds(90);
 
             var builder = mockBuilder.Object;
             builder.AddSmtpHealthCheck(new SmtpSettings(), timeout: timeout);
 
-            healthCheckArgs.Timeout.Should().Be(timeout);
+            healthCheckArguments.Timeout.Should().Be(timeout);
         }
 
         private static void AddSmtpHealthCheckCallback(
             HealthCheckRegistration registration,
-            out AddSmtpHealthCheckArgs args)
+            out AddSmtpHealthCheckArguments arguments)
         {
             var factoryTarget = registration.Factory.Target;
             var options = factoryTarget
@@ -204,7 +204,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
                 .GetField("options")
                 ?.GetValue(factoryTarget) as SmtpHealthCheckOptions;
 
-            args = new AddSmtpHealthCheckArgs
+            arguments = new AddSmtpHealthCheckArguments
             {
                 FailureStatus = registration.FailureStatus,
                 Name = registration.Name,
@@ -214,7 +214,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests.DependencyInjection
             };
         }
 
-        private sealed class AddSmtpHealthCheckArgs
+        private sealed class AddSmtpHealthCheckArguments
         {
             internal HealthStatus? FailureStatus { get; init; }
 

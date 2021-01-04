@@ -8,7 +8,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class EmailAddressTemplate
     {
-        private string? _address;
+        private string? address;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailAddressTemplate"/> class.
@@ -37,7 +37,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// white space.</exception>
         public string? Address
         {
-            get => _address;
+            get => address;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
@@ -47,7 +47,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
                         nameof(value));
                 }
 
-                _address = value;
+                address = value;
             }
         }
 

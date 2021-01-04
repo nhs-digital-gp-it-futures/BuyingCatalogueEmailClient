@@ -7,7 +7,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class EmailMessageTemplate
     {
-        private EmailAddressTemplate? _sender;
+        private EmailAddressTemplate? sender;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailMessageTemplate"/> class.
@@ -33,10 +33,10 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
         public EmailAddressTemplate? Sender
         {
-            get => _sender;
+            get => sender;
             set
             {
-                _sender = value ?? throw new ArgumentNullException(nameof(value));
+                sender = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
 

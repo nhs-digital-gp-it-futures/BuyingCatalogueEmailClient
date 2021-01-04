@@ -56,6 +56,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         [Test]
         public static void ToString_ReturnsFormattedString()
         {
+            // ReSharper disable once StringLiteralTypo (date format)
             var body = new EmailMessageBody(
                 "{0} {1:dd/MM/yyyy}",
                 "Hello",

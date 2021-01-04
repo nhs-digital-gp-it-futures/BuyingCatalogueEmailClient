@@ -58,7 +58,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var callback = mockTransport.Object.ServerCertificateValidationCallback;
 
-            callback.Invoke(null, null, null, SslPolicyErrors.None).Should().BeTrue();
+            callback.Invoke(null!, null, null, SslPolicyErrors.None).Should().BeTrue();
         }
 
         [Test]

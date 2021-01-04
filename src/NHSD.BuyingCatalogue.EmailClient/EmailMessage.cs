@@ -9,8 +9,8 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// </summary>
     public sealed class EmailMessage
     {
-        private readonly List<EmailAttachment> _attachments = new();
-        private readonly List<EmailAddress> _recipients = new();
+        private readonly List<EmailAttachment> attachments = new();
+        private readonly List<EmailAddress> recipients = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailMessage"/> class
@@ -55,13 +55,13 @@ namespace NHSD.BuyingCatalogue.EmailClient
 
 #pragma warning restore CA1508 // Avoid dead conditional code
 
-            _recipients.AddRange(recipients);
+            this.recipients.AddRange(recipients);
             Subject = template.Subject;
             HtmlBody = new EmailMessageBody(template.HtmlContent, formatItems);
             TextBody = new EmailMessageBody(template.PlainTextContent, formatItems);
 
             if (attachments != null)
-                _attachments.AddRange(attachments);
+                this.attachments.AddRange(attachments);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <summary>
         /// Gets the recipients of the message.
         /// </summary>
-        public IReadOnlyList<EmailAddress> Recipients => _recipients;
+        public IReadOnlyList<EmailAddress> Recipients => recipients;
 
         /// <summary>
         /// Gets the subject of the message.
@@ -92,7 +92,7 @@ namespace NHSD.BuyingCatalogue.EmailClient
         /// <summary>
         /// Gets the collection of message attachments.
         /// </summary>
-        public IReadOnlyList<EmailAttachment> Attachments => _attachments;
+        public IReadOnlyList<EmailAttachment> Attachments => attachments;
 
         /// <summary>
         /// Gets a value indicating whether the message has an attachment.
