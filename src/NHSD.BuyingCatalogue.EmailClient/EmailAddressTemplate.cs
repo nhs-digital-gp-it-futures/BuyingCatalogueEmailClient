@@ -6,9 +6,9 @@ namespace NHSD.BuyingCatalogue.EmailClient
     /// Defines a template that can be used to initialize the <see cref="EmailAddress"/>
     /// sender of a new <see cref="EmailMessage"/>.
     /// </summary>
-    public sealed class EmailAddressTemplate
+    public sealed record EmailAddressTemplate
     {
-        private string? address;
+        private readonly string? address;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailAddressTemplate"/> class.
@@ -31,14 +31,14 @@ namespace NHSD.BuyingCatalogue.EmailClient
         }
 
         /// <summary>
-        /// Gets or sets the actual e-mail address.
+        /// Gets the actual e-mail address.
         /// </summary>
         /// <exception cref="ArgumentException"><paramref name="value"/> is <see langword="null"/>, empty or
         /// white space.</exception>
         public string? Address
         {
             get => address;
-            set
+            init
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -52,10 +52,10 @@ namespace NHSD.BuyingCatalogue.EmailClient
         }
 
         /// <summary>
-        /// Gets or sets the display name of the address.
+        /// Gets the display name of the address.
         /// </summary>
         /// <remarks>An optional display name, for example Buying Catalogue Team.</remarks>
-        public string? DisplayName { get; set; }
+        public string? DisplayName { get; init; }
 
         /// <summary>
         /// Returns the <see cref="EmailAddress"/> representation of the current instance.

@@ -239,8 +239,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 Mock.Of<ILogger<MailKitEmailService>>());
 
             var subject = Guid.NewGuid().ToString();
-            var template = BasicTemplate;
-            template.Subject = subject;
+            var template = BasicTemplate with { Subject = subject };
 
             await service.SendEmailAsync(new EmailMessage(template, SingleRecipient));
 
@@ -264,8 +263,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
                 settings,
                 Mock.Of<ILogger<MailKitEmailService>>());
 
-            var template = BasicTemplate;
-            template.Subject = null;
+            var template = BasicTemplate with { Subject = null };
 
             await service.SendEmailAsync(new EmailMessage(template, SingleRecipient));
 
