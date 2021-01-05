@@ -108,8 +108,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Subject";
 
-            var template = BasicTemplate;
-            template.Subject = subject;
+            var template = BasicTemplate with { Subject = subject };
 
             var emailMessage = new EmailMessage(template, SingleRecipient);
 
@@ -125,8 +124,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Subject";
 
-            var template = BasicTemplate;
-            template.Subject = subject;
+            var template = BasicTemplate with { Subject = subject };
 
             var emailMessage = new EmailMessage(template, SingleRecipient);
 
@@ -141,8 +139,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
             const string emailSubjectPrefix = "Prefix";
             const string subject = "Subject";
 
-            var template = BasicTemplate;
-            template.Subject = subject;
+            var template = BasicTemplate with { Subject = subject };
 
             var emailMessage = new EmailMessage(template, SingleRecipient);
 
@@ -156,8 +153,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string expectedContent = "HTML";
 
-            var template = BasicTemplate;
-            template.HtmlContent = expectedContent;
+            var template = BasicTemplate with { HtmlContent = expectedContent };
 
             var emailMessage = new EmailMessage(template, SingleRecipient);
 
@@ -171,8 +167,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string expectedContent = "Text";
 
-            var template = BasicTemplate;
-            template.PlainTextContent = expectedContent;
+            var template = BasicTemplate with { PlainTextContent = expectedContent };
 
             var emailMessage = new EmailMessage(template, SingleRecipient);
 

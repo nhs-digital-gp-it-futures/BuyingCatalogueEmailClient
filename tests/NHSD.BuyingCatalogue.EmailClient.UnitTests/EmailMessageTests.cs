@@ -83,8 +83,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string subject = "Ant Morphology";
 
-            var template = EmptyTemplate;
-            template.Subject = subject;
+            var template = EmptyTemplate with { Subject = subject };
 
             var message = new EmailMessage(template, SingleRecipient);
 
@@ -96,8 +95,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         {
             const string htmlContent = "HTML Body";
 
-            var template = EmptyTemplate;
-            template.HtmlContent = htmlContent;
+            var template = EmptyTemplate with { HtmlContent = htmlContent };
 
             var message = new EmailMessage(template, SingleRecipient);
 
@@ -123,8 +121,8 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
         public static void Constructor_EmailMessageTemplate_InitializesTextBodyContent()
         {
             const string textContent = "Plain-text Body";
-            var template = EmptyTemplate;
-            template.PlainTextContent = textContent;
+
+            var template = EmptyTemplate with { PlainTextContent = textContent };
 
             var message = new EmailMessage(template, SingleRecipient);
 
