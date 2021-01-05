@@ -57,6 +57,7 @@
 	<s:Boolean x:Key="/Default/InstalledDictionaries/UseBundled/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Config/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Deserialization/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/UserDictionary/Words/=NHSD/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=NHSD/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Readonly/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
 <!-- ReSharper restore MarkupAttributeTypo -->
 <!-- ReSharper restore MarkupTextTypo -->

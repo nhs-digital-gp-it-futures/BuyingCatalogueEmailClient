@@ -8,6 +8,19 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
     /// </summary>
     public sealed class EmailResponse
     {
+#pragma warning disable IDE0044 // Add readonly modifier (must be mutable for deserialization)
+
+        [JsonProperty("from")]
+        private List<EmailAddress> from = new();
+
+        [JsonProperty("to")]
+        private List<EmailAddress> to = new();
+
+        [JsonProperty("attachments")]
+        private List<EmailResponseAttachment> attachments = new();
+
+#pragma warning restore IDE0044 // Add readonly modifier
+
         /// <summary>
         /// Gets or sets the ID of the message.
         /// </summary>
@@ -35,19 +48,19 @@ namespace NHSD.BuyingCatalogue.EmailClient.IntegrationTesting.Data
         /// <summary>
         /// Gets the list of From addresses of the email.
         /// </summary>
-        [JsonProperty("from")]
-        public List<EmailAddress> From { get; } = new();
+        [JsonIgnore]
+        public IReadOnlyList<EmailAddress> From => from;
 
         /// <summary>
         /// Gets the list of To addresses of the email.
         /// </summary>
-        [JsonProperty("to")]
-        public List<EmailAddress> To { get; } = new();
+        [JsonIgnore]
+        public IReadOnlyList<EmailAddress> To => to;
 
         /// <summary>
         /// Gets a list of the attachment metadata.
         /// </summary>
-        [JsonProperty("attachments")]
-        public List<EmailResponseAttachment> Attachments { get; } = new();
+        [JsonIgnore]
+        public IReadOnlyList<EmailResponseAttachment> Attachments => attachments;
     }
 }
