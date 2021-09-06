@@ -44,7 +44,7 @@ namespace NHSD.BuyingCatalogue.EmailClient.UnitTests
 
             var attachment = new EmailAttachment("fileName", content);
 
-            attachment.Content.Should().Be(content);
+            attachment.Content.Should().BeSameAs(content);
         }
     }
 }
